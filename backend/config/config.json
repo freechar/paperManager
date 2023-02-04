@@ -1,0 +1,10 @@
+{
+    "mysql":{
+        "host":"127.0.0.1",
+        "db_name":"PaperManager",
+        "port":3306,
+        "user": "root",
+        "password": "123456"
+    }
+
+}
