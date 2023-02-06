@@ -8,4 +8,6 @@ type ThesisFile struct {
 	ThesisId uint
 	Version uint
 	Name uint
+	Comments []Comment	`gorm:"foreginKey:ThesisFileId"`
+	evaluate Evaluate	`gorm:"foreginKey:ThesisFileId"`
 }

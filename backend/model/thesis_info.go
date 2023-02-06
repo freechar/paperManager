@@ -8,4 +8,7 @@ type ThesisInfo struct {
 	Name string
 	StagesId uint
 	StagesNow uint
+	Stage Stage 	`gorm:"foreignKey:StagesId"`
+	ThesisFiles []ThesisFile `gorm:"foreignKey:ThesisId"`
+	Diffs []Diff 	`gorm:"foreignKey:ThesisId"`
 }

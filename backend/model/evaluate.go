@@ -3,7 +3,8 @@ import(
 	"gorm.io/gorm"
 )
 
-type evaluate struct {
+type Evaluate struct {
 	gorm.Model
+	ThesisFileId uint
 	EvaluateText string
 }

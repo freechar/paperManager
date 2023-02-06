@@ -5,6 +5,7 @@ import(
 
 type Diff struct {
 	gorm.Model
+	ThesisId uint
 	OldThesisFile uint
 	NewThesisFile uint
 }
