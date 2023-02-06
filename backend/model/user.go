@@ -9,5 +9,5 @@ type User struct {
 	UserName string `gorm:"comment: 用户名"`
 	PassWd string	`gorm:"comment:用户密码的加密后"`
 	Mail string		`gorm:"comment:用户的电子邮箱"`
-	thesises []ThesisInfo `gorm:"foreignKey:Author"`
+	Thesises []ThesisInfo `gorm:"foreignKey:Author"`
 }
