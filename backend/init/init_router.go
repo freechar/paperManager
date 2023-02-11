@@ -1,0 +1,18 @@
+package init
+
+import (
+	"main/handlers"
+	"main/middleware"
+)
+func IntRouter() {
+	r:=ginEngine
+	r.Use(middleware.Cors())
+	
+	// 这部分不需要权限
+	r.POST("/login",handlers.Login)
+	r.POST("/register",handlers.Register)
+
+	//这部分是需要权限的
+	authGroup := r.Group("auth")
+	authGroup.Use(middleware.JWTAuth())
+}
