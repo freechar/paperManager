@@ -7,12 +7,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-type LoginForm struct {
+type loginForm struct {
 	Email     string `form:"email" binding:"required"`
 	Password string `form:"password" binding:"required"`
 }
 func Login(ctx *gin.Context) {
-	var form LoginForm
+	var form loginForm
 	err := ctx.ShouldBind(&form)
 	if err!= nil {
 		ctx.JSON(http.StatusOK, map[string] interface{} {
@@ -42,7 +42,7 @@ func Login(ctx *gin.Context) {
 	})
 }
 
-type RegisterForm struct {
+type registerForm struct {
 	UserType uint	`form:"user_type"`
 	UserName string `form:"user_name"`
 	PassWd string	`form:"password"`
@@ -50,7 +50,7 @@ type RegisterForm struct {
 }
 
 func Register(ctx *gin.Context) {
-	var form RegisterForm
+	var form registerForm
 	err := ctx.ShouldBind(&form)
 	if err != nil {
 		ctx.JSON(http.StatusOK,map[string] interface{} {
@@ -88,3 +88,4 @@ func Register(ctx *gin.Context) {
 	return 
 
 }
+

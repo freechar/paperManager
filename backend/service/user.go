@@ -13,6 +13,24 @@ type User struct {
 	UserName string 
 	Mail string		
 }
+
+func (r *User) GetUserInfoByID (userId uint ) (User,error) {
+	db:=global.Gdb 
+	user:=model.User{}
+	result:=db.First(&user,userId)
+	if result.Error!= nil{
+		return User{}, result.Error
+	}
+	userInfo:= User {
+		ID: user.ID,
+		UserType: user.UserType,
+		UserName: user.UserName,
+		Mail: user.Mail,
+	}
+	return userInfo, nil
+
+}
+
 func (r User)Login(email string, password string)(jwtToken string,err error) {
 	db := global.Gdb
 	user:= model.User{}
