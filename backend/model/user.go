@@ -10,4 +10,5 @@ type User struct {
 	PassWd string	`gorm:"comment:用户密码的加密后"`
 	Mail string		`gorm:"comment:用户的电子邮箱;unique"`
 	Thesises []ThesisInfo `gorm:"foreignKey:Author"`
+	NeedCheckThesises []*ThesisInfo `gorm:"many2many:checkers_thesises;"`
 }

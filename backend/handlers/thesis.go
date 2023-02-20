@@ -28,11 +28,25 @@ func GetThesisesByUser(ctx *gin.Context) {
 			"msg": err,
 		})
 		return
-	}
+	} 
 	ctx.JSON(http.StatusOK,json{
 		"status":"success",
 		"msg":"",
 		"thesises":thesises,
 	})
 	return
+}
+
+
+func GetThesisInfoById(ctx *gin.Context){
+	// 拿到论文的ID
+	thesisId := ctx.PostForm("thesis_id")
+	if thesisId=="" {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg":"thesisId empty",
+		})
+	}
+
+	
 }

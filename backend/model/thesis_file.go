@@ -10,4 +10,5 @@ type ThesisFile struct {
 	Name uint
 	Comments []Comment	`gorm:"foreginKey:ThesisFileId"`
 	Evaluate Evaluate	`gorm:"foreginKey:ThesisFileId"`
+	Diff Diff 	`gorm:"foreignKey:NewThesisFile"`
 }
