@@ -1,20 +1,22 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-let AuthContext = React.createContext(null)
+let AuthContext = React.createContext("")
 
 const Auth = ({ children }) => {
     
     const [token, setToken] = React.useState(null);
-
     const handleLogin = (jwt_token) => {
+        window.localStorage.setItem('token', jwt_token);
         setToken(jwt_token);
         // 存入localStorage
-        window.localStorage.setItem('token', jwt_token);
+        
     };
 
     const handleLogout = () => {
-        setToken(null);
+        console.log("Logout")
+        window.localStorage.setItem('token',""); 
+        setToken("");
     };
 
     const value = {
@@ -36,7 +38,8 @@ const ProtectedRoute = ({ children }) => {
 
     const { token } = UseAuth();
     console.log(token);
-    if (!token) {
+    if (!token||token==="") {
+        console.log("没登陆 滚去login")
         return <Navigate to="/login" replace />;
     }
 

@@ -1,16 +1,16 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Typography, Row, Col, Space, message, Avatar } from 'antd';
+import { Form, Input, Button, Checkbox, Typography, Row, Col, Space, message, Avatar, Radio } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 import logo from "../../assets/logo.png"
 import axios from 'axios';
-import { UseAuth} from '../auth';
+import {UseAuth} from '../auth';
 const { Title } = Typography;
 
 
 const LoginForm = () => {
   const{ onLogin }=UseAuth()
   const handleSubmit = async (values) => {
-    // e.preventDefault();
     const data = {
       email: values.email,
       password: values.password
@@ -37,6 +37,11 @@ const LoginForm = () => {
   const onFinish = (values) => {
     console.log('login:', values);
     handleSubmit(values);
+  };
+
+  const [UserType, setUserType] = useState('student');
+  const handleUserTypeChange = (e) => {
+    setUserType(e.target.value);
   };
   return (
     <Row justify="center" align="middle">
@@ -66,6 +71,12 @@ const LoginForm = () => {
               type="password"
               placeholder="密码"
             />
+          </Form.Item>
+          <Form.Item>
+          <Radio.Group value={UserType} onChange={handleUserTypeChange}>
+        <Radio.Button value="student">student</Radio.Button>
+        <Radio.Button value="teacher">teacher</Radio.Button>
+      </Radio.Group>
           </Form.Item>
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle>

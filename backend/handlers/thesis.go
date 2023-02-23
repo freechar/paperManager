@@ -3,7 +3,7 @@ package handlers
 import (
 	"main/service"
 	"net/http"
-
+	"strconv"
 	"github.com/gin-gonic/gin"
 )
 type json map[string] interface{} 
@@ -44,9 +44,34 @@ func GetThesisInfoById(ctx *gin.Context){
 	if thesisId=="" {
 		ctx.JSON(http.StatusOK,json{
 			"status":"failed",
-			"msg":"thesisId empty",
+			"msg":"thesisId is Empty",
 		})
+		return 
 	}
 
+	thesisId_int,err:= strconv.Atoi(thesisId)
+	if err!=nil{
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg":err.Error(),
+			
+		})
+		return
+	}
+	thesisInfo,err:= service.GetThesisInfoById(uint(thesisId_int))
+	if err!=nil{
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg":err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK,json{
+		"status":"success",
+		"msg":"",
+		"thesis_info":thesisInfo,
+	})
+	return
 	
 }

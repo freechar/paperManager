@@ -34,6 +34,7 @@ func AddThesisInfo(Author uint, Name string, StagesId uint,
 		StagesId: StagesId,
 		StagesNow: 0,
 		Introduction: Introduction,
+		LatestVersion: 0,
 	}
 	// 处理关联关系  只需要添加一个checkers
 	var checkers []*model.User

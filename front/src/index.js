@@ -1,29 +1,48 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import reportWebVitals from './reportWebVitals';
-
 import Login from "./components/login/Login"
-import Home from "./components/home/Home"
+import PaperList from './components/paperlist/PaperList';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { Auth,ProtectedRoute } from './components/auth';
+import { Auth, ProtectedRoute } from './components/auth';
+import HomeLayout from './components/home/Home';
+import DocPreview from './components/word_view/DocViewer';
+import ThesisInfo from './components/thesis_info/ThesisInfo';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
   {
     path: "/home",
-    element: <ProtectedRoute><Home/></ProtectedRoute>,
+    element: <ProtectedRoute><HomeLayout/></ProtectedRoute>,
+    children: [
+      {
+        path: "student/mypapers",
+        element: <PaperList />,
+      },
+      {
+        path:"thesisinfo/:id",
+        element: <ThesisInfo/> ,
+      },
+      {
+        path:"paper/:id",
+        element: <DocPreview/>,
+      }
+    ],
   },
   {
-    path:"/login",
-    element: <Login/>,
+    path: "/login",
+    element: <Login />,
   },
+  // {
+  //   path: "/test/:id",
+  //   element:<ThesisInfo/> ,
+  // },
   {
-    path:"/",
-    element:<div>This is root Page</div>,
+    path: "/",
+    element: <div>This is root Page</div>,
   }
 ])
 

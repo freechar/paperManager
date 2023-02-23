@@ -5,7 +5,7 @@ import { UseAuth } from '../auth';
 import { Navigate } from 'react-router-dom';
 const Login = () => {
   const{ token }=UseAuth()
-  if (token!=null) {
+  if (token!==""&&token!==null) {
     return <Navigate to="/home" replace />;
   }
   return (
