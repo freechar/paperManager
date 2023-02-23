@@ -4,12 +4,10 @@ import ProgressTracker from "../Steps";
 import { useNavigate, useParams } from "react-router-dom";
 import { UseAuth } from "../auth";
 import axios from "axios";
+import config from '../../config/config.json'
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { Title, Paragraph } = Typography;
-
-// 模拟数据
-const versions = [];
 
 const App = () => {
   // 选中的版本
@@ -30,7 +28,7 @@ const App = () => {
   useEffect(() => {
     var postData = new FormData();
     postData.append("thesis_id", id);
-    axios.post('http://127.0.0.1:8080/auth/thesisinfo', postData, {
+    axios.post( config.apiUrl+'/auth/thesisinfo', postData, {
       headers: {
         "Authorization": token
       }
@@ -41,7 +39,7 @@ const App = () => {
           var resThesisInfo = thesisInfoResponse.data.thesis_info
           console.log(resThesisInfo)
           // 在这里获取用户信息
-          axios.get('http://127.0.0.1:8080/auth/userinfo', {
+          axios.get(config.apiUrl+'/auth/userinfo', {
             params: {
               user_id: thesisInfoResponse.data.thesis_info.Author
             },

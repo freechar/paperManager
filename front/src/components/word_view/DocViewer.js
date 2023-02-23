@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { UseAuth } from "../auth";
 import axios from "axios";
 import { message } from "antd";
+import config from "../../config/config.json";
 const DocPreview = () => {
 
     var onDocumentReady = function (event) {
@@ -16,8 +17,8 @@ const DocPreview = () => {
     const { id } = useParams();
     useEffect(() => {
         var data = new FormData();
-        data.append("thesis_file_id",id);
-        axios.post('http://127.0.0.1:8080/auth/getpath', data, {
+        data.append("thesis_file_id", id);
+        axios.post(config.apiUrl + '/auth/getpath', data, {
             headers: {
                 "Authorization": token
             }
@@ -45,7 +46,7 @@ const DocPreview = () => {
                     "fileType": "docx",
                     "key": "Khirz6zTPdfd7",
                     "title": "Example Document Title.docx",
-                    "url": 'http://172.17.0.1:8080/' + Path
+                    "url": config.docxFileUrl + Path
                 },
                 "documentType": "word",
                 "editorConfig": {

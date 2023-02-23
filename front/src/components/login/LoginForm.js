@@ -5,6 +5,7 @@ import { useState } from 'react';
 import logo from "../../assets/logo.png"
 import axios from 'axios';
 import {UseAuth} from '../auth';
+import config from '../../config/config.json'
 const { Title } = Typography;
 
 
@@ -17,7 +18,7 @@ const LoginForm = () => {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:8080/login', data);
+      const response = await axios.post(config.apiUrl+'/login', data);
       if (response.data.status === 'success') {
         // perform success action
         message.success('登录成功！');

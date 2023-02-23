@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import PaperCard from './PaperCard';
 import { UseAuth } from '../auth';
+import config from '../../config/config.json'
 const PaperList = () => {
     const [thesisesData, setPaperData] = useState({
         Thesises: [],
@@ -10,7 +11,7 @@ const PaperList = () => {
     });
     const { token } = UseAuth();
     useEffect(() => {
-        axios.get('http://127.0.0.1:8080/auth/thesises', {
+        axios.get(config.apiUrl+'/auth/thesises', {
             headers: {
                 "Authorization": token
             }
