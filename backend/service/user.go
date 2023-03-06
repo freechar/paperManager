@@ -6,12 +6,14 @@ import (
 	"main/model"
 	"main/utils"
 	"time"
+
+	"github.com/go-playground/validator/v10"
 )
 type User struct {
 	ID uint
-	UserType uint	
-	UserName string 
-	Mail string		
+	UserType uint	`validate:"min=0,max=3"`
+	UserName string	`validate:"min=1,max=128"` 
+	Mail string		`validate:"min=1,max=64,email"`
 }
 
 func (r *User) GetUserInfoByID (userId uint ) (User,error) {
@@ -31,19 +33,16 @@ func (r *User) GetUserInfoByID (userId uint ) (User,error) {
 
 }
 
-func (r User)Login(email string, password string)(jwtToken string,err error) {
+func (r *User)Login(email string, password string)(jwtToken string,err error) {
 	db := global.Gdb
 	user:= model.User{}
 	result:=db.Where(&model.User{Mail: email}).First(&user)
-	// fmt.Println("userPassWd"+user.PassWd)
 	if result.Error!=nil {
 		return "", fmt.Errorf(result.Error.Error())
 	}
-	// fmt.Println("PassHash: "+password)
-	// fmt.Println("Passwd: "+user.PassWd)
 	if !utils.CheckPasswordHash(password,user.PassWd) {
 		
-		return "", fmt.Errorf("Invalid email or password")
+		return "", fmt.Errorf("invalid email or password")
 	}
 
 	tokenString ,err:= utils.GenerateToken(user.ID,time.Now().Add(3600*time.Hour))
@@ -59,14 +58,21 @@ func (r User)Login(email string, password string)(jwtToken string,err error) {
 	return tokenString,err
 }
 
-func (r User)Register(passwordStrHash string) (error) {
+func (r *User)Register(passwordStrHash string) (error) {
 	db:=global.Gdb
+
+	validate := validator.New()
+    err := validate.Struct(r)
+    if err != nil {
+        return err
+    }
+
 	// 看看mail有没有重复
 	user:=model.User{}
 	result :=db.Where(&model.User{Mail: r.Mail}).First(&user)
 	// 能检索到邮箱
 	if result.RowsAffected!=0 {
-		return fmt.Errorf("This email has already been registered.")
+		return fmt.Errorf("this email has already been registered")
 	}
 	// 可以正常注册进去
 	user = model.User{

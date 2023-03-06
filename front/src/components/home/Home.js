@@ -5,8 +5,7 @@ import {
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
-  
+  MailOutlined,  
 } from '@ant-design/icons';
 import { useNavigate,Outlet} from 'react-router-dom';
 import { Button, Layout, Menu, theme } from 'antd';
@@ -53,9 +52,9 @@ const HomeLayout = () => {
             },
             {
               key: '2',
-              icon: <VideoCameraOutlined />,
+              icon: <MailOutlined />,
               label: '待处理意见',
-              onClick: ()=>{navigate("/home")},
+              onClick: ()=>{navigate("/home/commentlist")},
 
             },
             {

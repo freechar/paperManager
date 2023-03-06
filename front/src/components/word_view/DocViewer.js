@@ -40,13 +40,13 @@ const DocPreview = () => {
     return (<div style={{ height: '100%' }}>
         <DocumentEditor
             id="docxEditor"
-            documentServerUrl="http://127.0.0.1/"
+            documentServerUrl={config.documentServerUrl}
             config={{
                 "document": {
                     "fileType": "docx",
                     "key": "Khirz6zTPdfd7",
                     "title": "Example Document Title.docx",
-                    "url": config.docxFileUrl + Path
+                    "url": config.docxFileUrl+"/"+Path,
                 },
                 "documentType": "word",
                 "editorConfig": {
