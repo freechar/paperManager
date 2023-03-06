@@ -1,13 +1,13 @@
 package init
 
-import "fmt"
-
-import(
-	Global "main/global"
-	Model "main/model"
-)
-
 import (
+	"fmt"
+	"reflect"
+
+	Global "main/global"
+
+	Model "main/model"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -42,15 +42,9 @@ func initMySQL() error {
 }
 
 func DBAutoMigrate() {
-	Global.Gdb.AutoMigrate(
-		&Model.Entry.User,
-		&Model.Entry.ThesisInfo,
-		&Model.Entry.ThesisFile,
-		&Model.Entry.Stage,
-		&Model.Entry.Evaluate,
-		&Model.Entry.Diff,
-		&Model.Entry.Comment,
-		&Model.Entry.CommentReply,
-	)
+	value := reflect.ValueOf(Model.Entry) // coordinate 是一个 Coordinate 实例
+	for num := 0; num < value.NumField(); num++ {
+		model := value.Field(num).Interface()
+		Global.Gdb.AutoMigrate(&model)
+	}
 }
-

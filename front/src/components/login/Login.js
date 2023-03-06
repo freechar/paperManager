@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 const Login = () => {
   const{ token }=UseAuth()
   if (token!==""&&token!==null) {
-    return <Navigate to="/home" replace />;
+    return <Navigate to="/student/mypapers" replace />;
   }
   return (
     <div style={{ backgroundImage: 'url(http://www.hfut.edu.cn/images/tusan.jpg)',backgroundSize: 'cover', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>

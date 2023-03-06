@@ -13,7 +13,7 @@ func IntRouter() {
 	// 这部分不需要权限
 	r.POST("/login", handlers.Login)
 	r.POST("/register", handlers.Register)
-	r.StaticFS("/assets", http.Dir("../../PaperManager/front/src/assets/"))
+	r.StaticFS("/assets", http.Dir("../front/src/assets/"))
 
 	//这部分是需要权限的
 	authGroup := r.Group("auth")
@@ -22,4 +22,5 @@ func IntRouter() {
 	authGroup.GET("/userinfo",handlers.GetUserInfo)
 	authGroup.POST("/getpath", handlers.GetThesisFilePathById)
 	authGroup.POST("/thesisinfo",handlers.GetThesisInfoById)
+	authGroup.GET("/comments",handlers.GetComments)
 }

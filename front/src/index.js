@@ -11,6 +11,7 @@ import { Auth, ProtectedRoute } from './components/auth';
 import HomeLayout from './components/home/Home';
 import DocPreview from './components/word_view/DocViewer';
 import ThesisInfo from './components/thesis_info/ThesisInfo';
+import TeacherComments from './components/comment/comment_page';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path:"paper/:id",
         element: <DocPreview/>,
+      },
+      {
+        path:"commentlist",
+        element: <TeacherComments/>,
       }
     ],
   },
@@ -36,10 +41,10 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
-  // {
-  //   path: "/test/:id",
-  //   element:<ThesisInfo/> ,
-  // },
+  {
+    path: "/test",
+    element:<TeacherComments/> ,
+  },
   {
     path: "/",
     element: <div>This is root Page</div>,
