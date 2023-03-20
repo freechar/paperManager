@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Input } from 'antd';
+import { useNavigate} from 'react-router-dom';
+
 import axios from 'axios';
 import { UseAuth } from '../auth';
 import config from '../../config/config.json'
@@ -7,29 +9,6 @@ import config from '../../config/config.json'
 
 
 
-// const data = [
-//     {
-//         key: '1',
-//         title: '论文标题1',
-//         comment: '评阅意见1',
-//         teacher: '老师1',
-//         time: '2023-02-28',
-//     },
-//     {
-//         key: '2',
-//         title: '论文标题2',
-//         comment: '评阅意见2',
-//         teacher: '老师2',
-//         time: '2023-03-01',
-//     },
-//     {
-//         key: '3',
-//         title: '论文标题3',
-//         comment: '评阅意见3',
-//         teacher: '老师3',
-//         time: '2023-03-02',
-//     },
-// ];
 
 const DetailsModal = ({ visible, onCancel, record }) => (
     <Modal open={visible} onCancel={onCancel} footer={null}>
@@ -47,6 +26,7 @@ const CrudPage = () => {
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [commentData, setCommentData] = useState([]);
     const { token } = UseAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(config.apiUrl + '/auth/comments', {
@@ -63,6 +43,7 @@ const CrudPage = () => {
                             let comment = response.data.comments[index];
                             comments.push({
                                 key: index.toString(),
+                                CommentId: comment.CommentId,
                                 title: comment.ThesisName,
                                 comment: comment.CommentText,
                                 teacher: comment.TeacherName,
@@ -148,7 +129,7 @@ const CrudPage = () => {
             title: '操作',
             key: 'action',
             render: (text, record) => (
-                <Button type="primary" onClick={() => showModal(record)}>
+                <Button type="primary" onClick={() =>{navigate("/home/comment/"+commentData[record.key].CommentId)}}>
                     查看详情
                 </Button>
             ),
@@ -156,6 +137,7 @@ const CrudPage = () => {
     ];
 
     const showModal = (record) => {
+        console.log(record.key)
         setSelectedRecord(record);
         setModalVisible(true);
     };

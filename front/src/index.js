@@ -11,7 +11,9 @@ import { Auth, ProtectedRoute } from './components/auth';
 import HomeLayout from './components/home/Home';
 import DocPreview from './components/word_view/DocViewer';
 import ThesisInfo from './components/thesis_info/ThesisInfo';
-import TeacherComments from './components/comment/comment_page';
+import TeacherComments from './components/comment/comment_list_page';
+import CommentDetail from './components/comment/comment_detail'
+import CommentReply from './components/comment/comment_reply'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
       {
         path:"commentlist",
         element: <TeacherComments/>,
+      },
+      {
+        path:"comment/:id",
+        element: <CommentDetail/>
+      },
+      {
+        path:"comment/reply",
+        element: <CommentReply/>
       }
     ],
   },

@@ -23,4 +23,7 @@ func IntRouter() {
 	authGroup.POST("/getpath", handlers.GetThesisFilePathById)
 	authGroup.POST("/thesisinfo",handlers.GetThesisInfoById)
 	authGroup.GET("/comments",handlers.GetComments)
+	authGroup.POST("/comment/add",handlers.AddComment)
+	authGroup.POST("/commentreply/add",handlers.AddCommentReply)
+	authGroup.POST("/commentinfo",handlers.GetCommentByCommentId)
 }

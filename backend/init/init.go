@@ -15,5 +15,4 @@ func Init()  {
 	}
 	InitGinEngine()
 	IntRouter()
-	return
 }

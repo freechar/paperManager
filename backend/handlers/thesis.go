@@ -34,7 +34,6 @@ func GetThesisesByUser(ctx *gin.Context) {
 		"msg":"",
 		"thesises":thesises,
 	})
-	return
 }
 
 
@@ -71,7 +70,5 @@ func GetThesisInfoById(ctx *gin.Context){
 		"status":"success",
 		"msg":"",
 		"thesis_info":thesisInfo,
-	})
-	return
-	
+	})	
 }

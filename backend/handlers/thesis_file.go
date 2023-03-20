@@ -20,7 +20,6 @@ func GetThesisFilePathById(ctx *gin.Context) {
 		})
 		return
 	}
-	fmt.Println(thesisFileId)
 	id, err := strconv.Atoi(thesisFileId)
 	if err != nil {
 		ctx.JSON(http.StatusOK, json{

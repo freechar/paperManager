@@ -9,6 +9,7 @@ import (
 type resComments struct {
 	ThesisName     string
 	ThesisFileName string
+	CommentId      uint
 	CommentText    string
 	TeacherName    string
 	Time           time.Time
@@ -32,6 +33,7 @@ func GetCommentsByUserId(userId uint) ([]resComments, error) {
 				comments = append(comments, resComments{
 					ThesisName:     thesis.Name,
 					ThesisFileName: thesisFile.Name,
+					CommentId:      comment.ID,
 					CommentText:    comment.CommentText,
 					TeacherName:    comment.Author.UserName,
 					Time:           comment.CreatedAt,
@@ -51,4 +53,12 @@ func AddComment(ThesisFileId uint, CommentText string, AuthorId uint) error {
 	}
 	result := db.Create(&comment)
 	return result.Error
+}
+
+
+func GetCommentByCommentId(commentId uint) (model.Comment, error) {
+	db := global.Gdb
+	comment := model.Comment{}
+	result := db.Model(&model.Comment{}).Preload("Author").Preload("Replies").Preload("Replies.Author").Find(&comment, commentId)
+	return comment, result.Error
 }

@@ -87,8 +87,6 @@ func Register(ctx *gin.Context) {
 		"status": "success",
 		"msg":    "",
 	})
-	return
-
 }
 
 func GetUserInfo(ctx *gin.Context) {
