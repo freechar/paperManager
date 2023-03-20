@@ -11,7 +11,7 @@ import (
 )
 type User struct {
 	ID uint
-	UserType uint	`validate:"min=0,max=3"`
+	UserType uint	`validate:"min=0,max=2"`
 	UserName string	`validate:"min=1,max=128"` 
 	Mail string		`validate:"min=1,max=64,email"`
 }

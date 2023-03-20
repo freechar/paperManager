@@ -5,32 +5,88 @@ import {
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
-  MailOutlined,  
+  MailOutlined,
 } from '@ant-design/icons';
-import { useNavigate,Outlet} from 'react-router-dom';
-import { Button, Layout, Menu, theme } from 'antd';
-import React, { useState } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
+import { Button, Layout, Menu, message, theme } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { UseAuth } from '../auth';
+import axios from "axios";
+import config from '../../config/config.json'
+
 
 const { Header, Sider, Content } = Layout;
 const HomeLayout = () => {
-  console.log("这里是Home")
   const [collapsed, setCollapsed] = useState(false);
   const { onLogout } = UseAuth()
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
   const onCollapse = (collapsed, type) => {
     console.log(collapsed)
     collapsed.log(type)
     return
-  }    
+  }
   const navigate = useNavigate();
 
   const logout = (event) => {
     onLogout();
   }
+  const { token } = UseAuth();
+  const [menus, Setmenus] = useState([{
+    key:"",
+    icon:"",
+    menu_name:"",
+    menu_url:"",
+  }]);
+  useEffect(() => {
+    // axios获取menus
+    axios.get(config.apiUrl + '/auth/menus', {
+      headers: {
+        "Authorization": token
+      }
+    })
+      .then(response => {
+        if (response.data.status === "success") {
+          console.log(response.data)
+          let menus = []
+          // 遍历menus
+          for (let index in response.data.menus) {
+            menus.push({
+              key: index.toString(),
+              icon: response.data.menus[index].Icon,
+              menu_name: response.data.menus[index].MenuName,
+              menu_url: response.data.menus[index].MenuPath,
 
+            })
+            Setmenus(menus)
+          }
+        } else {
+          message.error(response.data.msg)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [token])
+  // 这里写个map将icon和type对应起来
+  const iconMap = {
+    'user': <UserOutlined />,
+    'mail': <MailOutlined />,
+    'upload': <UploadOutlined />,
+  }
+
+  // 构建menu用的items
+  const items = menus.map(menu => {
+    return {
+      key: menu.key,
+      icon: iconMap[menu.icon],
+      label: menu.menu_name,
+      onClick: () => { navigate(menu.menu_url) },
+    }
+  })
+  console.log(items)
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={onCollapse} >
@@ -43,26 +99,7 @@ const HomeLayout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: '我的论文',
-              onClick: ()=>{navigate("/home/student/mypapers")},
-            },
-            {
-              key: '2',
-              icon: <MailOutlined />,
-              label: '待处理意见',
-              onClick: ()=>{navigate("/home/commentlist")},
-
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
-            },
-          ]}
+          items={items}
         />
       </Sider>
       <Layout className="site-layout">
@@ -92,7 +129,7 @@ const HomeLayout = () => {
             background: colorBgContainer,
           }}
         >
-          <Outlet/>.
+          <Outlet />.
         </Content>
       </Layout>
     </Layout>

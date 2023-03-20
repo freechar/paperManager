@@ -9,6 +9,7 @@ type entry struct {
 	Diff Diff
 	Comment Comment
 	CommentReply CommentReply
+	Menu Menu
 }
 
 var Entry = entry{}

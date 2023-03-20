@@ -5,7 +5,7 @@ import(
 
 type User struct {
 	gorm.Model
-	UserType uint	`gorm:"comment:用户类型"`
+	UserType uint	`gorm:"comment:用户类型 0:学生 1:教师 2:管理员"`
 	UserName string `gorm:"comment: 用户名"`
 	PassWd string	`gorm:"comment:用户密码的加密后"`
 	Mail string		`gorm:"comment:用户的电子邮箱;unique"`
