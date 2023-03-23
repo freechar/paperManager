@@ -49,7 +49,6 @@ const HomeLayout = () => {
     })
       .then(response => {
         if (response.data.status === "success") {
-          console.log(response.data)
           let menus = []
           // 遍历menus
           for (let index in response.data.menus) {
@@ -86,7 +85,6 @@ const HomeLayout = () => {
       onClick: () => { navigate(menu.menu_url) },
     }
   })
-  console.log(items)
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={onCollapse} >

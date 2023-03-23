@@ -3,12 +3,14 @@ import './word.css'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../auth";
+import React, { useRef } from "react";
 import axios from "axios";
 import { message } from "antd";
 import config from "../../config/config.json";
 const DocPreview = () => {
 
     var onDocumentReady = function (event) {
+        // console.log(window.DocEditor.instances.docxEditor.destroyEditor());
         console.log("Document is loaded");
     };
     // 根据id查地址
@@ -34,8 +36,6 @@ const DocPreview = () => {
                 console.error(error);
             })
 
-
-
     }, [id, token])
     return (<div style={{ height: '100%' }}>
         <DocumentEditor
@@ -46,14 +46,14 @@ const DocPreview = () => {
                     "fileType": "docx",
                     "key": "Khirz6zTPdfd7",
                     "title": "Example Document Title.docx",
-                    "url": config.docxFileUrl+"/"+Path,
+                    "url": config.docxFileUrl + "/" + Path,
                 },
                 "documentType": "word",
                 "editorConfig": {
                     "mode": "view"
                 },
             }}
-            events_onDocumentReady={onDocumentReady}
+            events_onInfo={onDocumentReady}
         />
     </div>
     )

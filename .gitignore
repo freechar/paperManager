@@ -2,3 +2,5 @@ front/src/assets/1.docx
 front/src/config/config.json
 backend/config/config.json
 front/src/assets/课程设计.docx
+docxBuilder/__pycache__
+docxBuilder/__pycache__/getComment.cpython-310.pyc
