@@ -29,6 +29,7 @@ func (r *User) GetUserInfoByID (userId uint ) (User,error) {
 		UserName: user.UserName,
 		Mail: user.Mail,
 	}
+	r = &userInfo
 	return userInfo, nil
 
 }

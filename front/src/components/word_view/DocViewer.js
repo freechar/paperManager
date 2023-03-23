@@ -3,31 +3,34 @@ import './word.css'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../auth";
-import React, { useRef } from "react";
+import React from "react";
 import axios from "axios";
 import { message } from "antd";
 import config from "../../config/config.json";
 const DocPreview = () => {
 
-    var onDocumentReady = function (event) {
+    var onDocumentChange = function (event) {
         // console.log(window.DocEditor.instances.docxEditor.destroyEditor());
-        console.log("Document is loaded");
+        console.log(event);
     };
     // 根据id查地址
-    const [Path, setPath] = useState("")
+    const [DocInfo, setInfo] = useState({Name:"",Path:""})
     const { token } = UseAuth()
     const { id } = useParams();
     useEffect(() => {
         var data = new FormData();
         data.append("thesis_file_id", id);
-        axios.post(config.apiUrl + '/auth/getpath', data, {
+        axios.post(config.apiUrl + '/auth/getdocinfo', data, {
             headers: {
                 "Authorization": token
             }
         })
             .then(response => {
                 if (response.data.status === "success") {
-                    setPath(response.data.path)
+                    setInfo({
+                        Name: response.data.Info.Name,
+                        Path: response.data.Info.Path
+                    })
                 } else {
                     message.error("fail get docx path")
                 }
@@ -45,15 +48,24 @@ const DocPreview = () => {
                 "document": {
                     "fileType": "docx",
                     "key": "Khirz6zTPdfd7",
-                    "title": "Example Document Title.docx",
-                    "url": config.docxFileUrl + "/" + Path,
+                    "title": DocInfo.Name+".docx",
+                    "owner": "11111",
+                    "url": config.docxFileUrl + "/" + DocInfo.Path,
+                    "permissions": {
+                        "comment": true,
+                        "edit": false,
+                        "editCommentAuthorOnly": true,
+                        "deleteCommentAuthorOnly": true,
+                    }
                 },
                 "documentType": "word",
                 "editorConfig": {
-                    "mode": "view"
+                    "customization": {
+                        "autoSave": true,
+                    }
                 },
             }}
-            events_onInfo={onDocumentReady}
+            events_onDocumentStateChange={onDocumentChange}
         />
     </div>
     )

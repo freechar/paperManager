@@ -37,7 +37,6 @@ const UseAuth = () => {
 const ProtectedRoute = ({ children }) => {
 
     const { token } = UseAuth();
-    console.log(token);
     if (!token||token==="") {
         console.log("没登陆 滚去login")
         return <Navigate to="/login" replace />;

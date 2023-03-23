@@ -40,7 +40,6 @@ const CommentForm = ({ UpdatedComment }) => {
         })
             .then(commentInfoResponse => {
                 if (commentInfoResponse.data.status === "success") {
-                    console.log(commentInfoResponse.data.comment);
                     commentInfoResponse.data.comment.UpdatedAt = commentInfoResponse.data.comment.UpdatedAt.replace("T", " ").replace(/\.\d{3}\+\d{2}:\d{2}$/, "");
                     var commentInfo = {
                         commentText: commentInfoResponse.data.comment.CommentText,
@@ -136,7 +135,6 @@ const Page = () => {
         })
             .then(commentInfoResponse => {
                 if (commentInfoResponse.data.status === "success") {
-                    console.log(commentInfoResponse.data.comment);
                     commentInfoResponse.data.comment.UpdatedAt = commentInfoResponse.data.comment.UpdatedAt.replace("T", " ").replace(/\.\d{3}\+\d{2}:\d{2}$/, "");
                     var commentInfo = {
                         commentText: commentInfoResponse.data.comment.CommentText,

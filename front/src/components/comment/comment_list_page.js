@@ -36,7 +36,6 @@ const CrudPage = () => {
         })
             .then(
                 response => {
-                    console.log(response.data)
                     let comments = []
                     if (response.data.status === 'success') {
                         for (let index in response.data.comments) {

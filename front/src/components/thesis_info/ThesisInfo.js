@@ -37,7 +37,6 @@ const App = () => {
         if (thesisInfoResponse.data.status === "success") {
           // setThesisInfo(thesisInfoResponse.data.thesis_info)
           var resThesisInfo = thesisInfoResponse.data.thesis_info
-          console.log(resThesisInfo)
           // 在这里获取用户信息
           axios.get(config.apiUrl+'/auth/userinfo', {
             params: {

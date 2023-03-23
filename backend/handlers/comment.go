@@ -17,7 +17,7 @@ func GetComments(ctx *gin.Context) {
 		})
 		return
 	}
-
+	
 	comments,err:=service.GetCommentsByUserId(userId.(uint))
 	if err!=nil {
 		ctx.JSON(http.StatusOK,json{

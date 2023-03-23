@@ -22,7 +22,6 @@ const LoginForm = () => {
       if (response.data.status === 'success') {
         // perform success action
         message.success('登录成功！');
-        console.log(response.data.token)
         // 这里去设置下token
         
         // setToken

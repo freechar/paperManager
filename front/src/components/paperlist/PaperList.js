@@ -19,7 +19,6 @@ const PaperList = () => {
             .then(response => {
                 if (response.data.status === 'success') {
                     setPaperData(response.data.thesises);
-                    console.log(response.data.thesises)
                 } else {
                     message.error(response.data.msg)
                 }

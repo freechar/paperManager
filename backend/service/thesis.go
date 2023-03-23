@@ -8,7 +8,22 @@ import (
 func GetThesisesByUserId(userId uint) (model.User, error) {
 	db := global.Gdb
 	user := model.User{}
-	result := db.First(&user, userId).Preload("Thesises").Preload("Thesises.Stage").Find(&user)
+	// 找到用户类型
+	result := db.First(&user, userId)
+	if result.Error != nil {
+		return user, result.Error
+	}
+	if user.UserType == 0 {
+		// 如果是学生
+		result = db.Preload("Thesises").Preload("Thesises.Stage").First(&user, userId)
+	} else if user.UserType == 1 {
+		// 如果是教师
+		result = db.Preload("NeedCheckThesises").Preload("NeedCheckThesises.Stage").First(&user, userId)
+		// 把NeedCheckThesises赋给Thesises
+		for _, thesis := range user.NeedCheckThesises {
+			user.Thesises = append(user.Thesises, *thesis)
+		}
+	}
 	return user, result.Error
 }
 

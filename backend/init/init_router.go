@@ -20,7 +20,7 @@ func IntRouter() {
 	authGroup.Use(middleware.JWTAuth())
 	authGroup.GET("/thesises", handlers.GetThesisesByUser)
 	authGroup.GET("/userinfo",handlers.GetUserInfo)
-	authGroup.POST("/getpath", handlers.GetThesisFilePathById)
+	authGroup.POST("/getdocinfo", handlers.GetThesisFileInfoById)
 	authGroup.POST("/thesisinfo",handlers.GetThesisInfoById)
 	authGroup.GET("/comments",handlers.GetComments)
 	authGroup.POST("/comment/add",handlers.AddComment)

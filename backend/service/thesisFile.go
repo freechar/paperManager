@@ -54,11 +54,9 @@ func AddThesisFile(ThesisId uint, Path string) (model.ThesisFile, error) {
 	})
 	return thesisFile, err
 }
-func GetThesisFilePath(thesisFileId uint) (string, error) {
+func GetThesisFileInfo(thesisFileId uint) (model.ThesisFile, error) {
 	db := global.Gdb
-	thesisFile := struct {
-		Path string
-	}{}
+	thesisFile := model.ThesisFile{}
 	result := db.Model(&model.ThesisFile{}).Find(&thesisFile, thesisFileId)
-	return thesisFile.Path, result.Error
+	return thesisFile, result.Error
 }

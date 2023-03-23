@@ -19,31 +19,39 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/home",
-    element: <ProtectedRoute><HomeLayout/></ProtectedRoute>,
+    element: <ProtectedRoute><HomeLayout /></ProtectedRoute>,
     children: [
       {
         path: "student/mypapers",
         element: <PaperList />,
       },
       {
-        path:"thesisinfo/:id",
-        element: <ThesisInfo/> ,
+        path: "teacher/cmtpaperlist",
+        element: <PaperList />,
       },
       {
-        path:"paper/:id",
-        element: <DocPreview/>,
+        path: "thesisinfo/:id",
+        element: <ThesisInfo />,
       },
       {
-        path:"commentlist",
-        element: <TeacherComments/>,
+        path: "paper/:id",
+        element: <DocPreview />,
       },
       {
-        path:"comment/:id",
-        element: <CommentDetail/>
+        path: "student/commentlist",
+        element: <TeacherComments />,
       },
       {
-        path:"comment/reply",
-        element: <CommentReply/>
+        path: "teacher/commentlist",
+        element: <TeacherComments />,
+      },
+      {
+        path: "comment/:id",
+        element: <CommentDetail />
+      },
+      {
+        path: "comment/reply",
+        element: <CommentReply />
       }
     ],
   },
@@ -53,7 +61,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/test",
-    element:<TeacherComments/> ,
+    element: <TeacherComments />,
   },
   {
     path: "/",

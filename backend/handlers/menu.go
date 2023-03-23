@@ -19,7 +19,7 @@ func GetMenu(ctx *gin.Context) {
 
 	// 通过用户id获取用户类型
 	u := service.User{}
-	_,err := u.GetUserInfoByID(userId.(uint))
+	u,err := u.GetUserInfoByID(userId.(uint))
 	if err != nil {
 		ctx.JSON(http.StatusOK,json{
 			"status":"failed",

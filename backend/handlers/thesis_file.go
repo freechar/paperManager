@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetThesisFilePathById(ctx *gin.Context) {
+func GetThesisFileInfoById(ctx *gin.Context) {
 	// 先拿到id
 	thesisFileId := ctx.PostForm("thesis_file_id")
 	fmt.Println(ctx.GetPostForm("thesis_file_id"))
@@ -28,7 +28,7 @@ func GetThesisFilePathById(ctx *gin.Context) {
 		})
 		return
 	}
-	path, err := service.GetThesisFilePath(uint(id))
+	Info, err := service.GetThesisFileInfo(uint(id))
 	if err != nil {
 		ctx.JSON(http.StatusOK, json{
 			"status": "failed",
@@ -39,6 +39,6 @@ func GetThesisFilePathById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, json{
 		"status": "success",
 		"msg":    "",
-		"path":   path,
+		"Info":   Info,
 	})
 }
