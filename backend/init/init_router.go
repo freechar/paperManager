@@ -13,6 +13,7 @@ func IntRouter() {
 	// 这部分不需要权限
 	r.POST("/login", handlers.Login)
 	r.POST("/register", handlers.Register)
+	r.POST("/save", handlers.SaveDocx)
 	r.StaticFS("/assets", http.Dir("../front/src/assets/"))
 
 	//这部分是需要权限的

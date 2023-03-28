@@ -14,7 +14,7 @@ const DocPreview = () => {
         console.log(event);
     };
     // 根据id查地址
-    const [DocInfo, setInfo] = useState({Name:"",Path:""})
+    const [DocInfo, setInfo] = useState({ Name: "", Path: "" })
     const { token } = UseAuth()
     const { id } = useParams();
     useEffect(() => {
@@ -48,21 +48,19 @@ const DocPreview = () => {
                 "document": {
                     "fileType": "docx",
                     "key": "Khirz6zTPdfd7",
-                    "title": DocInfo.Name+".docx",
+                    "title": DocInfo.Name + ".docx",
                     "owner": "11111",
                     "url": config.docxFileUrl + "/" + DocInfo.Path,
                     "permissions": {
                         "comment": true,
-                        "edit": false,
+                        "edit": true,
                         "editCommentAuthorOnly": true,
                         "deleteCommentAuthorOnly": true,
                     }
                 },
                 "documentType": "word",
                 "editorConfig": {
-                    "customization": {
-                        "autoSave": true,
-                    }
+                    "callbackUrl": config.docxFileUrl + "/save",
                 },
             }}
             events_onDocumentStateChange={onDocumentChange}
