@@ -25,4 +25,5 @@ console.log(JSON.stringify(comments));
     result = os.popen("onlyoffice-documentbuilder ./tmp/getComment.docbuilder")
     comments = json.load(result)
     return comments
-# get_comments("./Save.docx")
+# result = get_comments("./Save.docx")
+# print(result)
