@@ -17,6 +17,7 @@ const DocPreview = () => {
     const [DocInfo, setInfo] = useState({ Name: "", Path: "" })
     const { token } = UseAuth()
     const { id } = useParams();
+    const [userId, SetUserId] = useState(null)
     useEffect(() => {
         var data = new FormData();
         data.append("thesis_file_id", id);
@@ -26,7 +27,19 @@ const DocPreview = () => {
             }
         })
             .then(response => {
+                console.log(response.data)
                 if (response.data.status === "success") {
+                    axios.get(config.apiUrl + '/auth/myuserid', {
+                        headers: {
+                            "Authorization": token
+                        }
+                    })
+                        .then(userIdResponse => {
+                            SetUserId(userIdResponse.data.user_id)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
                     setInfo({
                         Name: response.data.Info.Name,
                         Path: response.data.Info.Path
@@ -38,7 +51,6 @@ const DocPreview = () => {
             .catch(error => {
                 console.error(error);
             })
-
     }, [id, token])
     return (<div style={{ height: '100%' }}>
         <DocumentEditor
@@ -60,7 +72,7 @@ const DocPreview = () => {
                 },
                 "documentType": "word",
                 "editorConfig": {
-                    "callbackUrl": config.docxFileUrl + "/save",
+                    "callbackUrl": config.docxFileUrl + "/save/"+userId+"?thesisFileId=" +  id ,
                 },
             }}
             events_onDocumentStateChange={onDocumentChange}
