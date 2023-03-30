@@ -28,7 +28,9 @@ func NewDocxService() DocxService {
 	}
 }
 
+// 因为只读 所以可以用url文件地址
 func (d DocxService) GetComments(path string) ([]resDocxComments, error) {
+
 	apiUrl := d.Url + "/getComments"
 	data := url.Values{}
 	data.Set("path", path)
@@ -38,6 +40,7 @@ func (d DocxService) GetComments(path string) ([]resDocxComments, error) {
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
+
 	res, err := simplejson.NewJson(body)
 	if err != nil {
 		return nil, err
@@ -47,6 +50,7 @@ func (d DocxService) GetComments(path string) ([]resDocxComments, error) {
 	if err != nil {
 		return nil, err
 	}
+	
 	for _, comment := range commentsJSON {
 		if each_map, ok := comment.(map[string]interface{}); ok {
 			comments = append(comments, resDocxComments{
@@ -59,4 +63,10 @@ func (d DocxService) GetComments(path string) ([]resDocxComments, error) {
 		}
 	}
 	return comments, nil
+}
+
+// 需要读写，所以需要具体的文件地址
+func (d DocxService) ChangeCommentsAutor(filePath string, commentsDiff string) error {
+
+	return nil
 }

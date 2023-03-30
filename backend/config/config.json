@@ -12,5 +12,9 @@
     "docx_service": {
         "host": "127.0.0.1",
         "port": "8081"
-    }
+    },
+    "server_in_onlyoffice": {
+        "url": "http://172.17.0.1:8080"
+    },
+    "data_path": "/home/shengzuxue/Code/paperManager/data"
 }

@@ -8,8 +8,7 @@ import (
 
 func initDocxService() {
 	DocxService := global.DocxServiceConf{
-		Url: viper.GetString("http://"+viper.GetString("docx.host")+":"+viper.GetString("docx.port")),
+		Url: "http://"+viper.GetString("docx_service.host")+":"+viper.GetString("docx_service.port"),
 	}
 	global.GDocxServiceConf = DocxService
-
 }
