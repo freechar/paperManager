@@ -5,6 +5,7 @@ import(
 type Comment struct {
 	gorm.Model
 	CommentText string
+	QuoteText string
 	ThesisFileId uint
 	AuthorId uint
 	Replies []CommentReply	`gorm:"foreignKey:CommentId"`

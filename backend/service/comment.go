@@ -20,7 +20,7 @@ func GetCommentsByUserId(userId uint) ([]resComments, error) {
 	db := global.Gdb
 	u := model.User{}
 	// 通过id查找到这个user
-	result := db.Model(&model.User{}).Find(&u,userId)
+	result := db.Model(&model.User{}).Find(&u, userId)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -74,12 +74,14 @@ func GetCommentsByUserId(userId uint) ([]resComments, error) {
 	return comments, nil
 }
 
-func AddComment(ThesisFileId uint, CommentText string, AuthorId uint) error {
+func AddComment(ThesisFileId uint, CommentText string,
+	QuoteText string, AuthorId uint) error {
 	db := global.Gdb
 	comment := model.Comment{
 		CommentText:  CommentText,
 		ThesisFileId: ThesisFileId,
 		AuthorId:     AuthorId,
+		QuoteText:    QuoteText,
 	}
 	result := db.Create(&comment)
 	return result.Error
@@ -88,6 +90,10 @@ func AddComment(ThesisFileId uint, CommentText string, AuthorId uint) error {
 func GetCommentByCommentId(commentId uint) (model.Comment, error) {
 	db := global.Gdb
 	comment := model.Comment{}
-	result := db.Model(&model.Comment{}).Preload("Author").Preload("Replies").Preload("Replies.Author").Find(&comment, commentId)
+	result := db.Model(&model.Comment{}).
+		Preload("Author").
+		Preload("Replies").
+		Preload("Replies.Author").
+		Find(&comment, commentId)
 	return comment, result.Error
 }

@@ -96,7 +96,7 @@ const HomeLayout = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={['0']}
           items={items}
         />
       </Sider>

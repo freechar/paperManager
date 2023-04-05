@@ -121,3 +121,20 @@ func GetUserInfo(ctx *gin.Context) {
 		"user_info":userInfo,
 	})
 }
+
+
+func GetMyUserId(ctx *gin.Context) {
+	userId,exists := ctx.Get("UserId")
+	if !exists {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg":"Authorization Error",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK,json{
+		"status":"success",
+		"msg":"",
+		"user_id":userId.(uint),
+	})
+}
