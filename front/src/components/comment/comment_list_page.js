@@ -152,7 +152,7 @@ const CrudPage = () => {
             <Table
                 columns={columns}
                 dataSource={commentData}
-                pagination={{ pageSize: 3, style: { position: 'fixed', bottom: "2%", right: "5%" } }}
+                pagination={{ pageSize: 6, style: { position: 'fixed', bottom: "2%", right: "5%" } }}
                 scroll={{ y: 500 }}
             />
             {selectedRecord && (

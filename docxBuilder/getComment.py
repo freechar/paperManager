@@ -1,6 +1,3 @@
-import os
-import json
-import uuid
 from useOnlyOfficeDocumentBuilder import buildExeContent
 
 def get_comments(file_path: str) -> dict:

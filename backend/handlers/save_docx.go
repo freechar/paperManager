@@ -7,7 +7,7 @@ import (
 	"main/utils"
 	"os"
 	"strconv"
-
+	// "fmt"
 	simplejson "github.com/bitly/go-simplejson"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -15,8 +15,23 @@ import (
 
 func SaveDocx(c *gin.Context) {
 
-	// userId := c.Param("userId")
+	userId := c.Param("userId")
+	userIdUint, err := strconv.ParseUint(userId, 10, 64)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": 0,
+		})
+	}
 	thesisFileId := c.Query("thesisFileId")
+	// 拿到用户名 通过用户id
+	u:= service.User{}
+	userInfo, err := u.GetUserInfoByID(uint(userIdUint))
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": 0,
+		})
+	}
+
 
 	localPrefix := "../data"
 
@@ -42,6 +57,10 @@ func SaveDocx(c *gin.Context) {
 			"error": 0,
 		})
 	}
+
+	// 打印bodyBytes
+	// fmt.Println(string(bodyBytes))
+
 	//解析json
 	json, err := simplejson.NewJson(bodyBytes)
 	if err != nil {
@@ -78,7 +97,6 @@ func SaveDocx(c *gin.Context) {
 		})
 		return
 	}
-
 	// 将旧的comments读取出来
 	commentsOld, err := s.GetComments(viper.GetString("server_in_onlyoffice.url") + "/" + thesisFileInfo.Path)
 	if err != nil {
@@ -110,6 +128,7 @@ func SaveDocx(c *gin.Context) {
 			})
 		}
 	}
+
 	// 将Diff转换成json字符串
 	jsonDiff, err := simplejson.NewJson([]byte("{}"))
 	if err != nil {
@@ -117,17 +136,16 @@ func SaveDocx(c *gin.Context) {
 			"error": 0,
 		})
 	}
-	for _, diff := range Diff {
-		jsonDiff.Set(diff.QuoteText, diff.Text)
-	}
+	jsonDiff.Set("changes", Diff)
 	jsonDiffString, err := jsonDiff.Encode()
 	if err != nil {
 		c.JSON(200, gin.H{
 			"error": 0,
 		})
 	}
+
 	// 将json字符串传给docxService
-	err = s.ChangeCommentsAutor(filePath, string(jsonDiffString))
+	err = s.ChangeCommentsAutor(filePath, string(jsonDiffString), userInfo.UserName)
 	if err != nil {
 		c.JSON(200, gin.H{
 			"error": 0,
@@ -143,6 +161,17 @@ func SaveDocx(c *gin.Context) {
 	}
 
 	// 将comment变化注册到数据库中
+	// 因为已经检测过差异了，只要将新的加入到数据库中就可以了
+	for _, comment := range Diff {
+		err = service.AddComment(uint(thesisFileIdUint), comment.Text, comment.QuoteText, uint(userIdUint))
+		if err != nil {
+			c.JSON(200, gin.H{
+				"error": 0,
+			})
+		}
+	}
+
+
 
 	c.JSON(
 		200,

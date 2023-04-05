@@ -66,7 +66,17 @@ func (d DocxService) GetComments(path string) ([]resDocxComments, error) {
 }
 
 // 需要读写，所以需要具体的文件地址
-func (d DocxService) ChangeCommentsAutor(filePath string, commentsDiff string) error {
+func (d DocxService) ChangeCommentsAutor(filePath string, commentsDiff string, autorName string) error {
+	apiUrl := d.Url + "/changeCommentsAutor"
+	data := url.Values{}
+	data.Set("path", filePath)
+	data.Set("commentNeedToChangeJsonText", commentsDiff)
+	data.Set("newAutorname", autorName)
+	resp, err := http.PostForm(apiUrl, data)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
 
 	return nil
 }

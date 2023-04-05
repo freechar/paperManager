@@ -4,9 +4,15 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../auth";
 import React from "react";
+import uuid from 'react-uuid'
 import axios from "axios";
 import { message } from "antd";
 import config from "../../config/config.json";
+
+
+
+
+
 const DocPreview = () => {
 
     var onDocumentChange = function (event) {
@@ -14,7 +20,7 @@ const DocPreview = () => {
         console.log(event);
     };
     // 根据id查地址
-    const [DocInfo, setInfo] = useState({ Name: "", Path: "" })
+    const [DocInfo, setInfo] = useState({ Name: "", Path: "", UpdateTime: "" })
     const { token } = UseAuth()
     const { id } = useParams();
     const [userId, SetUserId] = useState(null)
@@ -42,7 +48,8 @@ const DocPreview = () => {
                         })
                     setInfo({
                         Name: response.data.Info.Name,
-                        Path: response.data.Info.Path
+                        Path: response.data.Info.Path,
+                        UpdateTime: response.data.Info.UpdatedAt
                     })
                 } else {
                     message.error("fail get docx path")
@@ -59,7 +66,7 @@ const DocPreview = () => {
             config={{
                 "document": {
                     "fileType": "docx",
-                    "key": "Khirz6zTPdfd7",
+                    "key": uuid(),
                     "title": DocInfo.Name + ".docx",
                     "owner": "11111",
                     "url": config.docxFileUrl + "/" + DocInfo.Path,

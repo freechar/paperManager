@@ -64,7 +64,8 @@ func AddComment(ctx *gin.Context) {
 		})
 		return
 	}
-	service.AddComment(uint(thesis_file_id),CommentText,AuthorId.(uint))
+	// 不允许前端直接去添加含有QuoteText的comment
+	service.AddComment(uint(thesis_file_id),CommentText,"",AuthorId.(uint))
 }
 func GetCommentByCommentId(ctx *gin.Context) {
 	commentId:=ctx.PostForm("comment_id")

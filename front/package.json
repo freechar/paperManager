@@ -28,6 +28,7 @@
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "react-uuid": "^2.0.0",
     "steam": "^1.4.1",
     "stream-browserify": "^3.0.0",
     "util": "^0.12.5",
