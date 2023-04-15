@@ -1,6 +1,5 @@
 import { DocumentEditor } from "@onlyoffice/document-editor-react";
 import './word.css'
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../auth";
 import React from "react";
@@ -13,16 +12,16 @@ import config from "../../config/config.json";
 
 
 
-const DocPreview = () => {
+const DocViewer = (props) => {
 
     var onDocumentChange = function (event) {
         // console.log(window.DocEditor.instances.docxEditor.destroyEditor());
         console.log(event);
     };
     // 根据id查地址
-    const [DocInfo, setInfo] = useState({ Name: "", Path: "", UpdateTime: "" })
-    const { token } = UseAuth()
-    const { id } = useParams();
+    const [DocInfo, setInfo] = useState({ Name: "", Path: "", UpdateTime: "" });
+    const { token } = UseAuth();
+    const id = props.id;
     const [userId, SetUserId] = useState(null)
     useEffect(() => {
         var data = new FormData();
@@ -72,7 +71,7 @@ const DocPreview = () => {
                     "url": config.docxFileUrl + "/" + DocInfo.Path,
                     "permissions": {
                         "comment": true,
-                        "edit": true,
+                        "edit": false,
                         "editCommentAuthorOnly": true,
                         "deleteCommentAuthorOnly": true,
                     }
@@ -89,4 +88,4 @@ const DocPreview = () => {
 }
 
 
-export default DocPreview
+export default DocViewer

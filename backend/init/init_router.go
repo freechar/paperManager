@@ -20,14 +20,39 @@ func IntRouter() {
 	//这部分是需要权限的
 	authGroup := r.Group("auth")
 	authGroup.Use(middleware.JWTAuth())
-	authGroup.GET("/myuserid", handlers.GetMyUserId)
-	authGroup.GET("/thesises", handlers.GetThesisesByUser)
-	authGroup.GET("/userinfo",handlers.GetUserInfo)
-	authGroup.POST("/getdocinfo", handlers.GetThesisFileInfoById)
-	authGroup.POST("/thesisinfo",handlers.GetThesisInfoById)
-	authGroup.GET("/comments",handlers.GetComments)
-	authGroup.POST("/comment/add",handlers.AddComment)
-	authGroup.POST("/commentreply/add",handlers.AddCommentReply)
-	authGroup.POST("/commentinfo",handlers.GetCommentByCommentId)
-	authGroup.GET("/menus",handlers.GetMenu)
+	{
+		authGroup.GET("/myuserid", handlers.GetMyUserId)
+		authGroup.GET("/userinfo", handlers.GetUserInfo)
+		authGroup.GET("/getalluserinfo", handlers.GetAllUserInfo)
+		authGroup.DELETE("/user/delete/:id", handlers.DeleteUserById)
+		authGroup.POST("/user/update", handlers.UpdateUserInfo)
+		authGroup.GET("/userinfobyrole/:type", handlers.GetUserInfoByRole)
+	}
+	{
+		authGroup.GET("/thesises", handlers.GetThesisesByUser)
+		authGroup.POST("/thesisinfo", handlers.GetThesisInfoById)
+		authGroup.GET("/getallthesisinfo", handlers.GetAllThesisInfo)
+		authGroup.GET("/getthesisinfobychecker", handlers.GetThesisInfoByCheckerId)
+		authGroup.DELETE("/thesis/delete/:id", handlers.DelThesisInfoById)
+		authGroup.POST("/thesis/updateteacher", handlers.UpdateThesisTeacherRef)
+		authGroup.POST("/thesis/add", handlers.AddThesisInfo)
+		authGroup.POST("/thesis/update", handlers.UpdateThesisInfo)
+	}
+	{
+		authGroup.POST("/getdocinfo", handlers.GetThesisFileInfoById)
+	}
+	{
+		authGroup.GET("/comments", handlers.GetComments)
+		authGroup.POST("/comment/add", handlers.AddComment)
+		authGroup.DELETE("/comment/delete/:id", handlers.DeleteCommentById)
+		authGroup.POST("/commentreply/add", handlers.AddCommentReply)
+		authGroup.POST("/commentinfo", handlers.GetCommentByCommentId)
+	}
+	{
+		authGroup.GET("/getallstages", handlers.GetAllStages)
+		authGroup.POST("/addstages", handlers.AddStages)
+		authGroup.DELETE("/delstages/:id",handlers.DelStageById)
+	}
+	authGroup.GET("/menus", handlers.GetMenu)
+
 }

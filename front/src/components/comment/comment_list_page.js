@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Input } from 'antd';
-import { useNavigate} from 'react-router-dom';
+import { Table, Button, Modal, Input, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import { UseAuth } from '../auth';
 import config from '../../config/config.json'
 
-
-
-
-
-const DetailsModal = ({ visible, onCancel, record }) => (
-    <Modal open={visible} onCancel={onCancel} footer={null}>
-        <h3>{record.title}</h3>
-        <p>评阅意见：{record.comment}</p>
-        <p>老师姓名：{record.teacher}</p>
-        <p>评阅时间：{record.time}</p>
-    </Modal>
-);
-
-
-
-const CrudPage = () => {
+const CrudPage = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const [commentData, setCommentData] = useState([]);
+    const [commentData, setCommentData] = useState([{
+        ThesisFileId: "",
+        key: "",
+    }]);
     const { token } = UseAuth();
     const navigate = useNavigate();
-
-    useEffect(() => {
+    const updateCommentData = () => {
         axios.get(config.apiUrl + '/auth/comments', {
             headers: {
                 "Authorization": token
@@ -47,13 +34,17 @@ const CrudPage = () => {
                                 comment: comment.CommentText,
                                 teacher: comment.TeacherName,
                                 time: comment.Time,
+                                ThesisFileId: comment.ThesisFileId,
                             })
                         }
                         setCommentData(comments);
                     }
                 }
             )
-    },[token])
+    }
+    useEffect(() => {
+        updateCommentData()
+    }, [token])
 
     const columns = [
         {
@@ -128,23 +119,48 @@ const CrudPage = () => {
             title: '操作',
             key: 'action',
             render: (text, record) => (
-                <Button type="primary" onClick={() =>{navigate("/home/comment/"+commentData[record.key].CommentId)}}>
-                    查看详情
-                </Button>
+                <>
+                    <Button type="primary" onClick={() => { navigate("/home/comment/" + commentData[record.key].CommentId) }}>
+                        查看详情
+                    </Button>
+                    <Button type='primary' onClick={() => {
+                        navigate("/home/paper/" + commentData[record.key].ThesisFileId)
+                    }}
+                        style={{ marginLeft: '5px' }}
+                    >
+                        转到论文
+                    </Button>
+                    {/* 如果user_type == 1则显示一个删除评论按钮 */}
+                    {props.user_type == 1 &&
+                        <Button type='primary' style={{ marginLeft: '5px' }} onClick={() => {
+                            axios.delete(config.apiUrl + '/auth/comment/delete/' + commentData[record.key].CommentId, {
+                                headers: {
+                                    "Authorization": token
+                                }
+                            })
+                                .then(
+                                    response => {
+                                        if (response.data.status === 'success') {
+                                            Modal.success({
+                                                content: '删除成功',
+                                            });
+                                            // react 重新渲染
+                                            updateCommentData();
+                                        }
+                                        else {
+                                            Modal.error({
+                                                content: '删除失败',
+                                            });
+                                        }
+                                    }
+                                )
+                        }} >删除评论</Button>
+                    }
+                </>
+
             ),
         },
     ];
-
-    const showModal = (record) => {
-        console.log(record.key)
-        setSelectedRecord(record);
-        setModalVisible(true);
-    };
-
-    const handleCancel = () => {
-        setModalVisible(false);
-        setSelectedRecord(null);
-    };
 
 
     return (
@@ -152,12 +168,9 @@ const CrudPage = () => {
             <Table
                 columns={columns}
                 dataSource={commentData}
-                pagination={{ pageSize: 6, style: { position: 'fixed', bottom: "2%", right: "5%" } }}
-                scroll={{ y: 500 }}
+                pagination={{ pageSize: 8, style: { position: 'fixed', bottom: "2%", right: "5%" } }}
+                scroll={{ y: 'calc(100vh - 100px)' }}
             />
-            {selectedRecord && (
-                <DetailsModal visible={modalVisible} onCancel={handleCancel} record={selectedRecord} />
-            )}
         </>
     );
 };
