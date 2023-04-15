@@ -12,4 +12,6 @@ type User struct {
 	Thesises []ThesisInfo `gorm:"foreignKey:Author"`
 	// 当用户为教师的时候需要check的论文
 	NeedCheckThesises []*ThesisInfo `gorm:"many2many:checkers_thesises;"`
+	// 当用户为教师的时候需要评价的论文
+	NeedEvaluateThesises []*ThesisInfo `gorm:"many2many:evaluate_teachers_thesises;"`
 }

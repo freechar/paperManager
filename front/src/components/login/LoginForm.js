@@ -72,12 +72,12 @@ const LoginForm = () => {
               placeholder="密码"
             />
           </Form.Item>
-          <Form.Item>
+          {/* <Form.Item>
           <Radio.Group value={UserType} onChange={handleUserTypeChange}>
         <Radio.Button value="student">student</Radio.Button>
         <Radio.Button value="teacher">teacher</Radio.Button>
       </Radio.Group>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>记住我</Checkbox>

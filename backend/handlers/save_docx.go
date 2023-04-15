@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	// "fmt"
+	"fmt"
 	"io/ioutil"
 	"main/service"
 	"main/utils"
@@ -59,7 +59,7 @@ func SaveDocx(c *gin.Context) {
 	}
 
 	// 打印bodyBytes
-	// fmt.Println(string(bodyBytes))
+	fmt.Println(string(bodyBytes))
 
 	//解析json
 	json, err := simplejson.NewJson(bodyBytes)

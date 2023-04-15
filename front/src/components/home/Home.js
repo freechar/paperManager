@@ -96,7 +96,8 @@ const HomeLayout = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['0']}
+          // defaultSelectedKeys={['0']}
+          selectable ={false}
           items={items}
         />
       </Sider>
@@ -127,7 +128,7 @@ const HomeLayout = () => {
             background: colorBgContainer,
           }}
         >
-          <Outlet />.
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

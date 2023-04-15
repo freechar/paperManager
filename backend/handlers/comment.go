@@ -101,3 +101,35 @@ func GetCommentByCommentId(ctx *gin.Context) {
 		"msg":"",
 	})
 }
+
+func DeleteCommentById(ctx *gin.Context) {
+	commentId := ctx.Param("id")
+	if commentId=="" {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg": "comment_id empty",
+		})
+		return 
+	}
+	comment_id, err := strconv.Atoi(commentId)
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	err=service.DeleteCommentById(uint(comment_id))
+	if err!=nil {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg":err.Error(),
+		})
+		return 
+	}
+	ctx.JSON(http.StatusOK,json {
+		"status":"success",
+		"msg":"",
+	})
+}

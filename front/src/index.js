@@ -9,11 +9,15 @@ import {
 } from "react-router-dom";
 import { Auth, ProtectedRoute } from './components/auth';
 import HomeLayout from './components/home/Home';
-import DocPreview from './components/word_view/DocViewer';
 import ThesisInfo from './components/thesis_info/ThesisInfo';
+import DocPreview from './components/word_preview/word_preview';
 import TeacherComments from './components/comment/comment_list_page';
 import CommentDetail from './components/comment/comment_detail'
 import CommentReply from './components/comment/comment_reply'
+import UserList from './components/user_mgmt/user_list';
+import PaperMgmtList from './components/paper_mgmt/paper_list';
+import CommentSide from './components/comment/comment_side';
+import MyStuList from './components/my_student/my_student';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
@@ -27,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "teacher/cmtpaperlist",
-        element: <PaperList />,
+        element: <MyStuList />,
       },
       {
         path: "thesisinfo/:id",
@@ -39,11 +43,11 @@ const router = createBrowserRouter([
       },
       {
         path: "student/commentlist",
-        element: <TeacherComments />,
+        element: <TeacherComments user_type={0}/>,
       },
       {
         path: "teacher/commentlist",
-        element: <TeacherComments />,
+        element: <TeacherComments user_type={1}/>,
       },
       {
         path: "comment/:id",
@@ -52,6 +56,14 @@ const router = createBrowserRouter([
       {
         path: "comment/reply",
         element: <CommentReply />
+      },
+      {
+        path: "admin/usermgmt",
+        element: <UserList/>
+      },
+      {
+        path: "admin/papermgmt",
+        element: <PaperMgmtList/>
       }
     ],
   },
@@ -61,7 +73,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/test",
-    element: <TeacherComments />,
+    element: <MyStuList />,
   },
   {
     path: "/",

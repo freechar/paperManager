@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"main/global"
 	"main/model"
 	"time"
@@ -14,6 +13,7 @@ type resComments struct {
 	CommentText    string
 	TeacherName    string
 	Time           time.Time
+	ThesisFileId   uint
 }
 
 func GetCommentsByUserId(userId uint) ([]resComments, error) {
@@ -24,7 +24,7 @@ func GetCommentsByUserId(userId uint) ([]resComments, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	var comments []resComments
+	var commentsRes []resComments
 
 	// 判断用户类别
 	// 如果是学生，那么就查找他的论文
@@ -37,41 +37,51 @@ func GetCommentsByUserId(userId uint) ([]resComments, error) {
 		for _, thesis := range u.Thesises {
 			for _, thesisFile := range thesis.ThesisFiles {
 				for _, comment := range thesisFile.Comments {
-					comments = append(comments, resComments{
+					commentsRes = append(commentsRes, resComments{
 						ThesisName:     thesis.Name,
 						ThesisFileName: thesisFile.Name,
 						CommentId:      comment.ID,
 						CommentText:    comment.CommentText,
 						TeacherName:    comment.Author.UserName,
 						Time:           comment.CreatedAt,
+						ThesisFileId:   comment.ThesisFileId,
 					})
 				}
 			}
 		}
 	} else if u.UserType == 1 {
-		// 如果是教师，那么就查找他需要check的论文
+		// 在评论中找到AuthorId为userId的评论
+		comments := []model.Comment{}
+		result = db.Model(&model.Comment{}).Preload("Author").
+			Where("author_id = ?", userId).Find(&comments)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+		// 通过这个评论找到对应的论文
+		for _, comment := range comments {
+			thesisFile := model.ThesisFile{}
+			result = db.Model(&model.ThesisFile{}).Preload("ThesisInfo").
+				Find(&thesisFile, comment.ThesisFileId)
+			if result.Error != nil {
+				return nil, result.Error
+			}
+			commentsRes = append(commentsRes, resComments{
+				ThesisName:     thesisFile.ThesisInfo.Name,
+				ThesisFileName: thesisFile.Name,
+				CommentId:      comment.ID,
+				CommentText:    comment.CommentText,
+				TeacherName:    comment.Author.UserName,
+				Time:           comment.CreatedAt,
+				ThesisFileId:   comment.ThesisFileId,
+			})
+		}
 		result = db.Model(&model.User{}).Preload("NeedCheckThesises.ThesisFiles.Comments").
 			Preload("NeedCheckThesises.ThesisFiles.Comments.Author").Find(&u, userId)
 		if result.Error != nil {
 			return nil, result.Error
 		}
-		fmt.Println(u)
-		for _, thesis := range u.NeedCheckThesises {
-			for _, thesisFile := range thesis.ThesisFiles {
-				for _, comment := range thesisFile.Comments {
-					comments = append(comments, resComments{
-						ThesisName:     thesis.Name,
-						ThesisFileName: thesisFile.Name,
-						CommentId:      comment.ID,
-						CommentText:    comment.CommentText,
-						TeacherName:    comment.Author.UserName,
-						Time:           comment.CreatedAt,
-					})
-				}
-			}
-		}
 	}
-	return comments, nil
+	return commentsRes, nil
 }
 
 func AddComment(ThesisFileId uint, CommentText string,
@@ -96,4 +106,16 @@ func GetCommentByCommentId(commentId uint) (model.Comment, error) {
 		Preload("Replies.Author").
 		Find(&comment, commentId)
 	return comment, result.Error
+}
+
+func ChangeCommentStageTo(commentId uint, StageIndex uint) error {
+	db := global.Gdb
+	result := db.Model(&model.Comment{}).Where("id = ?", commentId).Update("stage", StageIndex)
+	return result.Error
+}
+
+func DeleteCommentById(commentId uint) error {
+	db := global.Gdb
+	result := db.Delete(&model.Comment{}, commentId)
+	return result.Error
 }

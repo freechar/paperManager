@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { useForm } from 'rc-field-form';
 
 const { Header, Content } = Layout;
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 const markdown = `
 # This is a title
 
@@ -46,6 +46,7 @@ const CommentForm = ({ UpdatedComment }) => {
                         commentAuthor: commentInfoResponse.data.comment.Author.UserName,
                         UpdatedAt: commentInfoResponse.data.comment.UpdatedAt,
                         CommentReplies: commentInfoResponse.data.comment.Replies,
+                        QuoteText: commentInfoResponse.data.comment.QuoteText,
                     }
                     UpdatedComment(commentInfo);
                 } else {
@@ -100,10 +101,10 @@ const CommentForm = ({ UpdatedComment }) => {
                 </Form.Item>
             </Form>
             {/* 使用Upload组件提供上传文件功能 */}
-            <Upload onChange={handleFileChange}>
-                {/* 使用按钮作为触发器 */}
-                <button>插入图片</button>
-            </Upload>
+            {/* <Upload onChange={handleFileChange}> */}
+            {/* 使用按钮作为触发器 */}
+            {/* <button>插入图片</button> */}
+            {/* </Upload> */}
         </>
 
 
@@ -119,7 +120,8 @@ const Page = () => {
         CommentReplies: [{
             Author: "",
             UpdatedAt: "",
-            ReplyText: ""
+            ReplyText: "",
+            QuoteText: "",
         }],
     });
     const { id } = useParams();
@@ -141,6 +143,7 @@ const Page = () => {
                         commentAuthor: commentInfoResponse.data.comment.Author.UserName,
                         UpdatedAt: commentInfoResponse.data.comment.UpdatedAt,
                         CommentReplies: commentInfoResponse.data.comment.Replies,
+                        QuoteText: commentInfoResponse.data.comment.QuoteText,
                     }
                     setComment(commentInfo);
                 } else {
@@ -158,7 +161,11 @@ const Page = () => {
                 {/* 使用Typography组件创建一个主题标题 */}
                 <Title level={2}>{comment.commentText}</Title>
                 {/* 使用Typography组件创建一个副标题 */}
-                <Typography.Title level={4}>Author: {comment.commentAuthor} Create At: {comment.UpdatedAt}</Typography.Title>
+                <Typography.Title level={4}>创建者: {comment.commentAuthor} 创建于: {comment.UpdatedAt}</Typography.Title>
+                {/* 如果QuoteText不等于“” 则显示 */}
+                {comment.QuoteText !== "" && <Paragraph>
+                    相关文段: {comment.QuoteText}
+                </Paragraph>}
                 {/* 使用List组件展示已有的评论列表 */}
                 <List
                     dataSource={comment.CommentReplies}
