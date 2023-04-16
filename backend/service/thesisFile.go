@@ -1,13 +1,13 @@
 package service
 
 import (
+	"gorm.io/gorm"
 	"main/global"
 	"main/model"
 	"strconv"
-	"gorm.io/gorm"
 )
 
-func AddThesisFile(ThesisId uint, Path string) (model.ThesisFile, error) {
+func AddThesisFile(ThesisId uint, Path string, SolvedComments []uint) (model.ThesisFile, error) {
 	db := global.Gdb
 	id := struct {
 		LatestVersion uint
@@ -25,9 +25,22 @@ func AddThesisFile(ThesisId uint, Path string) (model.ThesisFile, error) {
 		thesisFile = model.ThesisFile{
 			ThesisId: ThesisId,
 			Version:  id.LatestVersion,
-			Name:     id.Name +" v"+ strconv.Itoa(int(id.LatestVersion)+1),
+			Name:     id.Name + " v" + strconv.Itoa(int(id.LatestVersion)+1),
 			Path:     Path,
 		}
+		// 给ThesisFile的SolvedComments赋值
+		for _, v := range SolvedComments {
+			thesisFile.SolvedComments = append(thesisFile.SolvedComments, model.Comment{
+				Model: gorm.Model{
+					ID: v,
+				},
+			})
+		}
+		// 将solveComment的状态1
+		for _, v := range SolvedComments {
+			ChangeCommentStageToV2(tx,v,1)
+		}
+
 		// 创建
 		if err := tx.Create(&thesisFile).Error; err != nil {
 			return err

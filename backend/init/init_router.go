@@ -40,6 +40,7 @@ func IntRouter() {
 	}
 	{
 		authGroup.POST("/getdocinfo", handlers.GetThesisFileInfoById)
+		authGroup.POST("/uploadthesisfile", handlers.UploadThesisInfoById)
 	}
 	{
 		authGroup.GET("/comments", handlers.GetComments)
@@ -47,6 +48,7 @@ func IntRouter() {
 		authGroup.DELETE("/comment/delete/:id", handlers.DeleteCommentById)
 		authGroup.POST("/commentreply/add", handlers.AddCommentReply)
 		authGroup.POST("/commentinfo", handlers.GetCommentByCommentId)
+		authGroup.GET("/getcommentsbythesisid", handlers.GetCommentsByThesisId)
 	}
 	{
 		authGroup.GET("/getallstages", handlers.GetAllStages)

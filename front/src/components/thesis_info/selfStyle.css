@@ -1,0 +1,9 @@
+.selfClass{
+    display: 'flex';
+    flex-direction: 'column';
+}
+
+
+.selfClass label{
+    margin-inline-start: 8px;
+}

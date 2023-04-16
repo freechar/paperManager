@@ -1,9 +1,12 @@
 package service
 
 import (
+	// "fmt"
 	"main/global"
 	"main/model"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type resComments struct {
@@ -75,11 +78,11 @@ func GetCommentsByUserId(userId uint) ([]resComments, error) {
 				ThesisFileId:   comment.ThesisFileId,
 			})
 		}
-		result = db.Model(&model.User{}).Preload("NeedCheckThesises.ThesisFiles.Comments").
-			Preload("NeedCheckThesises.ThesisFiles.Comments.Author").Find(&u, userId)
-		if result.Error != nil {
-			return nil, result.Error
-		}
+		// result = db.Model(&model.User{}).Preload("NeedCheckThesises.ThesisFiles.Comments").
+		// 	Preload("NeedCheckThesises.ThesisFiles.Comments.Author").Find(&u, userId)
+		// if result.Error != nil {
+		// 	return nil, result.Error
+		// }
 	}
 	return commentsRes, nil
 }
@@ -114,8 +117,25 @@ func ChangeCommentStageTo(commentId uint, StageIndex uint) error {
 	return result.Error
 }
 
+func ChangeCommentStageToV2(tx *gorm.DB, commentId uint, StageIndex uint) error {
+	result := tx.Model(&model.Comment{}).Where("id = ?", commentId).Update("stage", StageIndex)
+	return result.Error
+}
+
 func DeleteCommentById(commentId uint) error {
 	db := global.Gdb
 	result := db.Delete(&model.Comment{}, commentId)
 	return result.Error
+}
+
+func GetCommentsByThesisId(thesisId uint) ([]model.Comment, error) {
+	db := global.Gdb
+	// fmt.Println(thesisId)
+	comments := []model.Comment{}
+	// 通过thesisId找到所有的comment
+	result := db.Preload("Author").
+		Where("thesis_files.thesis_id = ? AND comments.stage = ?", thesisId, 0).
+		Joins("JOIN thesis_files ON thesis_files.id = comments.thesis_file_id").
+		Find(&comments)
+	return comments, result.Error
 }
