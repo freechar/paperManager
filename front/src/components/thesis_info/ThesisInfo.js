@@ -148,7 +148,7 @@ const App = () => {
           <Button type="primary" onClick={() => { setUploadCardVisible(true) }}>
             上传新的版本
           </Button>
-          <UploadCardModal visible={uploadCardVisible} setVisible={setUploadCardVisible} />
+          <UploadCardModal visible={uploadCardVisible} setVisible={setUploadCardVisible} thesisId={id}/>
           <Button style={{ marginLeft: "10px" }} type="primary" onClick={handleCommentPaper}>
             评阅论文
           </Button>

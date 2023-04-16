@@ -34,6 +34,42 @@ func GetComments(ctx *gin.Context) {
 	})
 }
 
+func GetCommentsByThesisId(ctx *gin.Context) {
+	// 获取TheisId 从Get请求中获取
+	ThesisId:=ctx.Query("thesis_id")
+	if ThesisId=="" {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"comments":"",
+			"msg": "thesis_id empty",
+		})
+		return 
+	}
+	thesis_id, err := strconv.Atoi(ThesisId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	comments,err:=service.GetCommentsByThesisId(uint(thesis_id))
+	if err!=nil {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"comments":"",
+			"msg":err.Error(),
+		})
+		return 
+	}
+	ctx.JSON(http.StatusOK,json {
+		"status":"success",
+		"comments":comments,
+		"msg":"",
+	})
+}
+
+
 func AddComment(ctx *gin.Context) {
 	// 拿到ThesisFileId and AuthorId
 	AuthorId,exists:= ctx.Get("UserId")

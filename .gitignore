@@ -8,7 +8,7 @@ docxBuilder/onlyoffice-documentbuilder_amd64.deb
 docxBuilder/Save.docx
 docxBuilder/tmp/getComment.docbuilder
 docxBuilder/data
-data/课程设计.docx
+data/*
 backend/config/config.json
 backend/config/config.json
-data/Save/TestPaper v1.docx1
+
