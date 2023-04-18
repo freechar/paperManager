@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"github.com/gin-gonic/gin"
 )
+
 func GetComments(ctx *gin.Context) {
 	// 获取用户的id
 	userId, exists:=ctx.Get("UserId")
@@ -134,6 +135,73 @@ func GetCommentByCommentId(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK,json {
 		"status":"success",
 		"comment":comment,
+		"msg":"",
+	})
+}
+
+func GetCommentsSolved(ctx *gin.Context) {
+	// 获取 ThesisFileId 从Get请求中获取
+	ThesisFileId:=ctx.Query("thesis_file_id")
+	if ThesisFileId=="" {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"comments":"",
+			"msg": "thesis_file_id empty",
+		})
+		return 
+	}
+	thesis_file_id, err := strconv.Atoi(ThesisFileId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}	
+	comments,err:= service.GetSubmitedCommentBeforeThesisFileIdByThesisId(uint(thesis_file_id))
+	if err!=nil {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"comments":"",
+			"msg":err.Error(),
+		})
+		return 
+	}
+	ctx.JSON(http.StatusOK,json {
+		"status":"success",
+		"comments":comments,
+		"msg":"",
+	})
+}
+
+func CommentHaveSolved(ctx *gin.Context) {
+	// 获取 commentId 从Post请求中获取
+	commentId:=ctx.PostForm("comment_id")
+	if commentId=="" {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg": "comment_id empty",
+		})
+		return 
+	}
+	comment_id, err := strconv.Atoi(commentId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	err=service.ChangeCommentStageTo(uint(comment_id),2)
+	if err!=nil {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg":err.Error(),
+		})
+		return 
+	}
+	ctx.JSON(http.StatusOK,json {
+		"status":"success",
 		"msg":"",
 	})
 }

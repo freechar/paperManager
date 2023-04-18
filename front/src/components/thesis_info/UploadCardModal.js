@@ -44,7 +44,9 @@ const UploadCard = (props) => {
 
 
     const handleUploadCardCancel = () => {
-        props.updatehandle()
+        props.updatehandle();
+        setFileList([]);
+        setUploadSuccess(false);
         setUploadCardVisible(false);
     };
     const handleUpload = (info) => {
@@ -59,7 +61,7 @@ const UploadCard = (props) => {
             }
         })
             .then(response => {
-                console.log(response.data);
+                // console.log(response.data);
                 if (response.data.status === 'success') {
                     setUploadSuccess(true);
                 }
@@ -71,7 +73,7 @@ const UploadCard = (props) => {
 
     const handleCommentSelection = (selectedOptions) => {
         setSelectedOptions(selectedOptions);
-        console.log(selectedOptions);
+        // console.log(selectedOptions);
     }
 
 

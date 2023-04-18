@@ -81,7 +81,7 @@ const CrudPage = (props) => {
             key: 'comment',
         },
         {
-            title: '老师姓名',
+            title: '提出者',
             dataIndex: 'teacher',
             key: 'teacher',
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (

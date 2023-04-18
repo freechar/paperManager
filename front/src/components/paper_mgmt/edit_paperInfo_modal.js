@@ -15,7 +15,7 @@ const EditPaperInfoModal = (props) => {
         Email: ''
     }]);
     const handleOk = () => {
-        console.log(form.getFieldsValue(["CheckerTeacher", "EvaluateTeachers"]));
+        // console.log(form.getFieldsValue(["CheckerTeacher", "EvaluateTeachers"]));
         let formDate = form.getFieldsValue(["CheckerTeacher", "EvaluateTeachers"]);
         let postData = new FormData();
         postData.append('thesis_id', paperInfo.PaperId);

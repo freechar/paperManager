@@ -39,7 +39,7 @@ const PaperMgmtList = () => {
                 response => {
                     let paperList = []
                     if (response.data.status === 'success') {
-                        console.log(response.data.thesis_infos);
+                        // console.log(response.data.thesis_infos);
                         for (let index in response.data.thesis_infos) {
                             let checkers = []
                             for (let i in response.data.thesis_infos[index].Checkers) {

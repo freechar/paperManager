@@ -19,7 +19,7 @@ const Page = () => {
 
   // 定义一个处理文件变化事件的函数
   const handleFileChange = (info) => {
-    console.log(info)
+    // console.log(info)
     // // 如果文件状态是done（已完成）
     // if (info.file.status === 'done') {
     //   // 获取文件响应数据（假设是返回了文件地址）

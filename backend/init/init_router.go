@@ -49,6 +49,8 @@ func IntRouter() {
 		authGroup.POST("/commentreply/add", handlers.AddCommentReply)
 		authGroup.POST("/commentinfo", handlers.GetCommentByCommentId)
 		authGroup.GET("/getcommentsbythesisid", handlers.GetCommentsByThesisId)
+		authGroup.GET("/solvedcomments", handlers.GetCommentsSolved)
+		authGroup.POST("/solvecomment",handlers.CommentHaveSolved)
 	}
 	{
 		authGroup.GET("/getallstages", handlers.GetAllStages)

@@ -39,7 +39,10 @@ const MyStuList = () => {
                             thesis.name = userName;
                             thesis.title = res.data.data[i].Thesises[j].Name;
                             thesis.thesisId = res.data.data[i].Thesises[j].ID;
-                            thesis.laestFile = res.data.data[i].Thesises[j].ThesisFiles[res.data.data[i].Thesises[j].ThesisFiles.length - 1].ID;
+                            thesis.laestFile = res.data.data[i].Thesises[j].ThesisFiles.length !== 0 ?
+                                res.data.data[i].Thesises[j].ThesisFiles[res.data.data[i].Thesises[j].ThesisFiles.length - 1].ID
+                                : -1
+                                ;
                             thesisList.push(thesis);
                         }
                     }
@@ -131,7 +134,7 @@ const MyStuList = () => {
                         转到论文详情页面
                     </Button>
                     <Button type='primary' onClick={() => {
-                        navigate('/home/paper/'+record.laestFile);
+                        navigate('/home/paper/' + record.laestFile);
                     }}>
                         指导论文
                     </Button>

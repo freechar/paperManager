@@ -16,7 +16,7 @@ const DocViewer = (props) => {
 
     var onDocumentChange = function (event) {
         // console.log(window.DocEditor.instances.docxEditor.destroyEditor());
-        console.log(event);
+        // console.log(event);
     };
     // 根据id查地址
     const [DocInfo, setInfo] = useState({ Name: "", Path: "", UpdateTime: "" });
@@ -32,7 +32,7 @@ const DocViewer = (props) => {
             }
         })
             .then(response => {
-                console.log(response.data)
+                // console.log(response.data)
                 if (response.data.status === "success") {
                     axios.get(config.apiUrl + '/auth/myuserid', {
                         headers: {
@@ -58,7 +58,7 @@ const DocViewer = (props) => {
                 console.error(error);
             })
     }, [id, token])
-    return (<div style={{ height: '100%' }}>
+    return (<div style={{ height: '85vh' }}>
         <DocumentEditor
             id="docxEditor"
             documentServerUrl={config.documentServerUrl}

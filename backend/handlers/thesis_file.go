@@ -2,14 +2,12 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"main/service"
 	"main/utils"
 	"net/http"
 	"strconv"
-
-	"github.com/google/uuid"
-
-	"github.com/gin-gonic/gin"
 )
 
 func GetThesisFileInfoById(ctx *gin.Context) {
@@ -66,19 +64,15 @@ func UploadThesisInfoById(ctx *gin.Context) {
 	}
 	// 获取解决的评论
 	solvedComment := ctx.PostForm("solved_comment")
-	if solvedComment == "" {
-		ctx.JSON(http.StatusOK, json{
-			"status": "failed",
-			"msg":    "solved_comment empty",
-		})
-		return
-	}
-	// 将解决的评论转换为数组
-	solvedCommentArray := utils.StringToIntArray(solvedComment)
-	// int数组转换为uint数组
 	var solvedCommentUintArray []uint
-	for _, v := range solvedCommentArray {
-		solvedCommentUintArray = append(solvedCommentUintArray, uint(v))
+	solvedCommentUintArray = make([]uint, 0)
+	if solvedComment != "" {
+		// 将解决的评论转换为数组
+		solvedCommentArray := utils.StringToIntArray(solvedComment)
+		// int数组转换为uint数组
+		for _, v := range solvedCommentArray {
+			solvedCommentUintArray = append(solvedCommentUintArray, uint(v))
+		}
 	}
 
 	// 获取文件

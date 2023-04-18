@@ -37,7 +37,7 @@ const App = () => {
     navigate("/home/paper/" + thesisInfo.Versions[thesisInfo.Versions.length - 1].ID)
   }
 
-  const handleupdate = ()=> {
+  const handleupdate = () => {
     var postData = new FormData();
     postData.append("thesis_id", id);
     axios.post(config.apiUrl + '/auth/thesisinfo', postData, {
@@ -112,9 +112,17 @@ const App = () => {
       <Content style={{ padding: "50px" }}>
         <div style={{ marginBottom: "30px" }}>
           <Title level={3}>论文简要信息</Title>
-          <Paragraph>
-            {thesisInfo.Introduction}
-          </Paragraph>
+          <div>
+            {/* {thesisInfo.Introduction} */}
+            {thesisInfo.Introduction.split('\n').map((item, index) => {
+              return (
+                <span key={index}>
+                  {item}
+                  <br />
+                </span>
+              );
+            })}
+          </div>
           <Paragraph>
             作者: {thesisInfo.AuthorName} <br />
             本文指导教师: {names} <br />
@@ -140,15 +148,19 @@ const App = () => {
               </Select>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
                 确认预览
               </Button>
             </Form.Item>
           </Form>
-          <Button type="primary" onClick={() => { setUploadCardVisible(true) }}>
-            上传新的版本
-          </Button>
-          <UploadCardModal visible={uploadCardVisible} setVisible={setUploadCardVisible} thesisId={id}/>
+
+          {
+            userType == 0 && <Button type="primary" onClick={() => { setUploadCardVisible(true) }} style={{ marginLeft: "10px" }}>
+              上传新的版本
+            </Button>
+          }
+
+          <UploadCardModal visible={uploadCardVisible} setVisible={setUploadCardVisible} thesisId={id} updatehandle={handleupdate} />
           <Button style={{ marginLeft: "10px" }} type="primary" onClick={handleCommentPaper}>
             评阅论文
           </Button>
@@ -159,11 +171,10 @@ const App = () => {
                 type="primary"
                 onClick={() => {
                   setUpdateThesisInfoModalVisible(true);
-                  console.log(updateThesisInfoModalVisible)
+                  // console.log(updateThesisInfoModalVisible)
                 }}>
                 修改论文信息
               </Button>
-
             </>
 
           }
