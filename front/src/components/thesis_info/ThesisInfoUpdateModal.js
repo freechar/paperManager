@@ -48,7 +48,7 @@ const ThesisInfoUpdateModal = (props) => {
     const title = props.Title;
     const introduction = props.Introduction;
     return (<Modal
-        open={props.visible}
+        open={props.visible}                
         title="修改论文信息"
         onCancel={onCancel}
         onOk={handleOk}
@@ -66,5 +66,7 @@ const ThesisInfoUpdateModal = (props) => {
 }
 ThesisInfoUpdateModal.defaultProps = {
     updatehandle: () => { },
+    Introduction: '',
+    Title: '',
 }
 export default ThesisInfoUpdateModal;

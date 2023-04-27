@@ -13,7 +13,7 @@ import (
 func GetThesisFileInfoById(ctx *gin.Context) {
 	// 先拿到id
 	thesisFileId := ctx.PostForm("thesis_file_id")
-	fmt.Println(ctx.GetPostForm("thesis_file_id"))
+	// fmt.Println(ctx.GetPostForm("thesis_file_id"))
 	if thesisFileId == "" {
 		ctx.JSON(http.StatusOK, json{
 			"status": "failed",

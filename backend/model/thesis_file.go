@@ -13,6 +13,6 @@ type ThesisFile struct {
 	ThesisInfo     ThesisInfo `gorm:"foreignKey:ThesisId"`
 	Comments       []Comment  `gorm:"foreginKey:ThesisFileId"`
 	SolvedComments []Comment  `gorm:"foreignKey:SolvedThesisFileId"`
-	Evaluate       Evaluate   `gorm:"foreginKey:ThesisFileId"`
+	Evaluate       []Evaluate   `gorm:"foreginKey:ThesisFileId"`
 	Diff           Diff       `gorm:"foreignKey:NewThesisFile"`
 }

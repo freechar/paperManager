@@ -93,6 +93,41 @@ func GetAllThesisInfo(ctx *gin.Context) {
 	})
 }
 
+
+func GetThesisInfoNeedToCompletion(ctx *gin.Context) {
+	// 获取UserId
+	userId, exists := ctx.Get("UserId")
+	if !exists {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    "Authorization Error",
+		})
+		return
+	}
+	// 获取需要补全的论文信息
+	thesisInfos, err := service.GetThesisInfoByCheckerId(userId.(uint))
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	// 筛选Status为0的
+	var thesisInfosNeedToCompletion []model.ThesisInfo
+	for _, thesisInfo := range thesisInfos {
+		if thesisInfo.Status == 0 {
+			thesisInfosNeedToCompletion = append(thesisInfosNeedToCompletion, thesisInfo)
+		}
+	}
+	ctx.JSON(http.StatusOK, json{
+		"status":       "success",
+		"msg":          "",
+		"thesis_infos": thesisInfosNeedToCompletion,
+	})
+	
+}
+
 func DelThesisInfoById(ctx *gin.Context) {
 	thesisId := ctx.Param("id")
 	if thesisId == "" {
@@ -179,9 +214,9 @@ func UpdateThesisTeacherRef(ctx *gin.Context) {
 	}
 	// 更新论文信息
 	err = service.UpdateThesisTeacherRef(uint(thesisId_int), uint(teacherId_int), evaluate_teachersIds_uint)
-	fmt.Println(thesisId_int)
-	fmt.Println(teacherId_int)
-	fmt.Println(evaluate_teachersIds_uint)
+	// fmt.Println(thesisId_int)
+	// fmt.Println(teacherId_int)
+	// fmt.Println(evaluate_teachersIds_uint)
 	if err != nil {
 		ctx.JSON(http.StatusOK, json{
 			"status": "failed",
@@ -342,8 +377,84 @@ func UpdateThesisInfo(ctx *gin.Context) {
 	})
 }
 
+func ThesisInfnCompletion(ctx * gin.Context) {
+	// 拿到ThesisId
+	thesisId := ctx.PostForm("thesis_id")
+	if thesisId == "" {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    "thesisId is Empty",
+		})
+		return
+	}
+	thesisId_int, err := strconv.Atoi(thesisId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	service.ChangeThesisInfoStatusTo(uint(thesisId_int), 1)
+	ctx.JSON(http.StatusOK, json{
+		"status": "success",
+		"msg":    "",
+	})	
+}
+
+
+func UpdateThesisAuthor(ctx *gin.Context) {
+	// 两个参数
+	thesisId := ctx.PostForm("thesis_id")
+	if thesisId == "" {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    "thesisId is Empty",
+		})
+		return
+	}
+	thesisId_int, err := strconv.Atoi(thesisId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	authorId := ctx.PostForm("author_id")
+	if authorId == "" {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    "authorId is Empty",
+		})
+		return
+	}
+	authorId_int, err := strconv.Atoi(authorId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	// 更新论文信息
+	err = service.UpdateThesisAuthor(uint(thesisId_int), uint(authorId_int))
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, json{
+		"status": "success",
+		"msg":    "",
+	})
+}
+
+
 func GetThesisInfoByCheckerId(ctx *gin.Context) {
-	// 拿到评阅教师ID
+	// 拿到指导教师ID
 	userId, exists := ctx.Get("UserId")
 	if !exists {
 		ctx.JSON(http.StatusOK, json{
@@ -396,5 +507,34 @@ func GetThesisInfoByCheckerId(ctx *gin.Context) {
 		"status": "success",
 		"msg":    "",
 		"data":   studentInfos,
+	})
+}
+
+
+func GetAllThesisInfoByEvaTeacherId(ctx *gin.Context) {
+	// 拿到评阅教师ID
+	userId, exists := ctx.Get("UserId")
+	if !exists {
+		ctx.JSON(http.StatusOK, json{
+			"status":   "failed",
+			"thesises": "",
+			"msg":      "Authorization Error",
+		})
+		return
+	}
+	// 拿到论文信息
+	thesisInfo, err := service.GetAllThesisInfoByEvaTeacherId(userId.(uint))
+	if err!=nil {
+		ctx.JSON(http.StatusOK, json{
+			"status":   "failed",
+			"thesises": "",
+			"msg":      err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, json{
+		"status":   "success",
+		"thesises": thesisInfo,
+		"msg":      "",
 	})
 }

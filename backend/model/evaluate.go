@@ -6,5 +6,6 @@ import(
 type Evaluate struct {
 	gorm.Model
 	ThesisFileId uint
+	AuthorID uint
 	EvaluateText string
 }

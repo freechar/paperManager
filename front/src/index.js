@@ -18,6 +18,8 @@ import UserList from './components/user_mgmt/user_list';
 import PaperMgmtList from './components/paper_mgmt/paper_list';
 import CommentSide from './components/comment/comment_side';
 import MyStuList from './components/my_student/my_student';
+import CltThesisInfoList from './components/completion_thesisInfo_page/thesisInfoList.js';
+import EvaPaperList from './components/evapaperlist/paperlist';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
@@ -33,7 +35,7 @@ const router = createBrowserRouter([
         path: "teacher/cmtpaperlist",
         element: <MyStuList />,
       },
-      {
+      { 
         path: "thesisinfo/:id",
         element: <ThesisInfo />,
       },
@@ -44,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "student/commentlist",
         element: <TeacherComments user_type={0}/>,
+      },
+      {
+        path: "teacher/evapaperlist",
+        element:<EvaPaperList/>
+      },
+      {
+        path: "teacher/needtocompletion",
+        element: <CltThesisInfoList/>   
       },
       {
         path: "teacher/commentlist",
