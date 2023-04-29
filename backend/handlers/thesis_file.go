@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"main/service"

@@ -33,6 +33,7 @@ const MyStuList = () => {
                         let userId = res.data.data[i].StudentId;
                         let userName = res.data.data[i].StudentName;
                         for (let j = 0; j < res.data.data[i].Thesises.length; j++) {
+                            if (res.data.data[i].Thesises[j].Status === 0) continue;
                             let thesis = {};
                             thesis.key = i * 100 + j;
                             thesis.id = userId;

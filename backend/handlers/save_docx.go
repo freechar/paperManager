@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"io/ioutil"
 	"main/service"
 	"main/utils"

@@ -9,6 +9,10 @@ def buildExeContent(content: str) -> dict:
     tmp_file_path = "./tmp"+"/getComment"+str(uuid.uuid1())+".docbuilder"
     write_to_file(tmp_file_path, content)
     result = os.popen("onlyoffice-documentbuilder "+tmp_file_path)
-    comments = json.load(result)
-    os.remove(tmp_file_path) 
-    return comments
+    try:
+        comments = json.load(result)
+        os.remove(tmp_file_path) 
+        return comments
+    except Exception as e:
+        os.remove(tmp_file_path) 
+        return dict([("error", str(e)), ("content", result.read())])
