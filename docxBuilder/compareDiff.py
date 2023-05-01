@@ -12,5 +12,6 @@ builder.CloseFile();
     content = content.replace("filePathBef", file_path_bef)
     content = content.replace("filePatgNow", file_path_now)
     content = content.replace("SaveName", save_name)
+    # print(content)
     result = buildExeContent(content)
     return result

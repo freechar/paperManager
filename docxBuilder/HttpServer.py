@@ -35,9 +35,14 @@ def compareDocumentDiffHandler():
     path_now = request.form.get('path_now')
     path_save = request.form.get('path_save')
     response = diff_document(localPrefix+path_before, localPrefix+path_now, localPrefix+path_save)
-
+    if response.get("error") != None:
+        return jsonify({
+            "status": "error",
+            "error": response.get("error"),
+            "content": response.get("content")
+        })
     return jsonify({
-        "comments": response
+        "status": "success",
     })
 
 

@@ -15,4 +15,7 @@ def buildExeContent(content: str) -> dict:
         return comments
     except Exception as e:
         os.remove(tmp_file_path) 
-        return dict([("error", str(e)), ("content", result.read())])
+        result_str = result.read()
+        if result_str == "":
+            return dict([])
+        return dict([("error", str(e)), ("content", result_str)])

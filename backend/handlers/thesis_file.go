@@ -44,6 +44,42 @@ func GetThesisFileInfoById(ctx *gin.Context) {
 	})
 }
 
+
+func GetThesisIdByFileId(ctx *gin.Context) {
+	// 获取文件id get参数
+	fileId := ctx.Query("thesis_file_id")
+	if fileId == "" {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    "thesis_file_id empty",
+		})
+		return
+	}
+	id, err := strconv.Atoi(fileId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	thesisId, err := service.GetThesisFileInfo(uint(id))
+	
+	if err!=nil {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg": err.Error(),
+		})
+		return 
+	}
+	ctx.JSON(
+		http.StatusOK,json{
+			"status":"success",
+			"msg":"",
+			"thesis_id":thesisId.ThesisId,
+		})	
+}
+
 func UploadThesisInfoById(ctx *gin.Context) {
 	// 获取ThesisId
 	thesisId := ctx.PostForm("thesis_id")

@@ -1,10 +1,12 @@
 package service
 
 import (
-	"gorm.io/gorm"
+	// "fmt"
 	"main/global"
 	"main/model"
 	"strconv"
+
+	"gorm.io/gorm"
 )
 
 func AddThesisFile(ThesisId uint, Path string, SolvedComments []uint) (model.ThesisFile, error) {
@@ -28,6 +30,8 @@ func AddThesisFile(ThesisId uint, Path string, SolvedComments []uint) (model.The
 			Name:     id.Name + " v" + strconv.Itoa(int(id.LatestVersion)+1),
 			Path:     Path,
 		}
+
+		// fmt.Println(id)
 		// 给ThesisFile的SolvedComments赋值
 		for _, v := range SolvedComments {
 			thesisFile.SolvedComments = append(thesisFile.SolvedComments, model.Comment{
@@ -70,6 +74,7 @@ func AddThesisFile(ThesisId uint, Path string, SolvedComments []uint) (model.The
 func GetThesisFileInfo(thesisFileId uint) (model.ThesisFile, error) {
 	db := global.Gdb
 	thesisFile := model.ThesisFile{}
-	result := db.Model(&model.ThesisFile{}).Find(&thesisFile, thesisFileId)
+	result := db.Model(&model.ThesisFile{}).Preload("ThesisInfo").Find(&thesisFile, thesisFileId)
 	return thesisFile, result.Error
 }
+

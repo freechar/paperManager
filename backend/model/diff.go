@@ -8,4 +8,5 @@ type Diff struct {
 	ThesisId uint
 	OldThesisFile uint
 	NewThesisFile uint
+	DiffFilePath string
 }

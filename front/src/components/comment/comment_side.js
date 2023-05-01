@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { List, Button, message } from 'antd';
+import { List, Button, message, Form, Select } from 'antd';
 import config from '../../config/config.json'
 import { Comment } from '@ant-design/compatible';
 import { UseAuth } from "../auth";
@@ -11,6 +11,7 @@ const listStyle = {
   border: '1px solid #e8e8e8',
   boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.05)',
 };
+
 
 
 
@@ -47,8 +48,12 @@ const CommentList = (props) => {
         }
       )
   }, [])
+
+
+
   return (
     <List
+      // dataSource={comments}
       dataSource={commentList.map(({ content, author, commentId }) => ({
         author: author,
         avatar: config.apiUrl + "/assets/default_avatar.webp",
@@ -109,11 +114,17 @@ const comments = [
   },
 ];
 
-const CommentSide = (props) => (
-  <div>
-    <CommentList thesisFileId={props.thesisFileId} />
-  </div>
-);
+const CommentSide = (props) => {
+
+  return (<>
+    <div style={{ height: '600px', overflowY: 'auto' }}>
+      <CommentList thesisFileId={props.thesisFileId} />
+    </div>
+  </>)
+}
+
+
+  ;
 
 
 

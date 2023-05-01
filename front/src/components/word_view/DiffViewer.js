@@ -10,31 +10,22 @@ import config from "../../config/config.json";
 
 
 
-
-
-const DocViewer = (props) => {
+const DiffViewer = (props) => {
 
     var onDocumentChange = function (event) {
         // console.log(window.DocEditor.instances.docxEditor.destroyEditor());
         // console.log(event);
     };
     // 根据id查地址
-    const [DocInfo, setInfo] = useState({ Name: "", Path: "", UpdateTime: "" });
+    const Path = props.path;
+    const ThesisFileId = props.id;
+    console.log(config.docxFileUrl + "/data/" + Path);
+    const Title = props.title;
     const { token } = UseAuth();
-    const id = props.id;
+
     const [userId, SetUserId] = useState(null)
-    useEffect(() => {
-        var data = new FormData();
-        data.append("thesis_file_id", id);
-        axios.post(config.apiUrl + '/auth/getdocinfo', data, {
-            headers: {
-                "Authorization": token
-            }
-        })
-            .then(response => {
-                // console.log(response.data)
-                if (response.data.status === "success") {
-                    axios.get(config.apiUrl + '/auth/myuserid', {
+    useEffect(()=>{
+        axios.get(config.apiUrl + '/auth/myuserid', {
                         headers: {
                             "Authorization": token
                         }
@@ -45,20 +36,7 @@ const DocViewer = (props) => {
                         .catch(error => {
                             console.log(error)
                         })
-                    // console.log(config.docxFileUrl + "/" + response.data.Info.Path)
-                        setInfo({
-                            Name: response.data.Info.Name,
-                            Path: response.data.Info.Path,
-                            UpdateTime: response.data.Info.UpdatedAt
-                        })
-                } else {
-                    message.error("fail get docx path")
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
-    }, [id, token])
+    },[token])
     return (<div style={{ height: '85vh' }}>
         <DocumentEditor
             id="docxEditor"
@@ -67,11 +45,11 @@ const DocViewer = (props) => {
                 "document": {
                     "fileType": "docx",
                     "key": uuid(),
-                    "title": DocInfo.Name + ".docx",
+                    "title": Title + ".docx",
                     "owner": "11111",
-                    "url": config.docxFileUrl + "/" + DocInfo.Path,
+                    "url": config.docxFileUrl + "/data/" + Path,
                     "permissions": {
-                        "comment": true,
+                        "comment": false,
                         "edit": false,
                         "editCommentAuthorOnly": true,
                         "deleteCommentAuthorOnly": true,
@@ -79,7 +57,7 @@ const DocViewer = (props) => {
                 },
                 "documentType": "word",
                 "editorConfig": {
-                    "callbackUrl": config.docxFileUrl + "/save/" + userId + "?thesisFileId=" + id,
+                    "callbackUrl": config.docxFileUrl + "/save/" + userId + "?thesisFileId=" + ThesisFileId,
                 },
             }}
             events_onDocumentStateChange={onDocumentChange}
@@ -89,4 +67,4 @@ const DocViewer = (props) => {
 }
 
 
-export default DocViewer
+export default DiffViewer
