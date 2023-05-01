@@ -11,7 +11,7 @@ const PaperList = () => {
     });
     const { token } = UseAuth();
     useEffect(() => {
-        axios.get(config.apiUrl+'/auth/thesises', {
+        axios.get(config.apiUrl + '/auth/thesises', {
             headers: {
                 "Authorization": token
             }
@@ -34,7 +34,7 @@ const PaperList = () => {
     const paperCards = thesisesData.Thesises.map((data, index) => {
         return (
             <div key={index} style={cardStyle}>
-                <PaperCard key={index} title={data.Name} author={thesisesData.UserName} status={data.Stage.StageNames.split("#")[data.StagesNow]} ThesisId={data.ID}/>
+                <PaperCard key={index} title={data.Name} author={thesisesData.UserName} status={data.Stage.StageNames.split("#")[data.StagesNow]} ThesisId={data.ID} />
             </div>
         )
     });
@@ -47,9 +47,9 @@ const PaperList = () => {
 };
 
 const cardStyle = {
-    width: '23%',
+    width: '200px',
     height: '250px',
-    margin: '10px',
+    marginRight: '30px',
     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
     borderRadius: '5px'
 };
@@ -57,7 +57,8 @@ const cardStyle = {
 const cardListContainer = {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around'
+    justifyContent: 'flex-start'
+
 };
 
 

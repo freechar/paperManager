@@ -35,7 +35,7 @@ const LoginForm = () => {
     }
   };
   const onFinish = (values) => {
-    console.log('login:', values);
+    // console.log('login:', values);
     handleSubmit(values);
   };
 

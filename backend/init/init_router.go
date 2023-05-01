@@ -20,6 +20,7 @@ func IntRouter() {
 	//这部分是需要权限的
 	authGroup := r.Group("auth")
 	authGroup.Use(middleware.JWTAuth())
+
 	{
 		authGroup.GET("/myuserid", handlers.GetMyUserId)
 		authGroup.GET("/userinfo", handlers.GetUserInfo)
@@ -28,18 +29,28 @@ func IntRouter() {
 		authGroup.POST("/user/update", handlers.UpdateUserInfo)
 		authGroup.GET("/userinfobyrole/:type", handlers.GetUserInfoByRole)
 	}
+
 	{
 		authGroup.GET("/thesises", handlers.GetThesisesByUser)
 		authGroup.POST("/thesisinfo", handlers.GetThesisInfoById)
 		authGroup.GET("/getallthesisinfo", handlers.GetAllThesisInfo)
 		authGroup.GET("/getthesisinfobychecker", handlers.GetThesisInfoByCheckerId)
+		authGroup.GET("/getthesisinfobyevateacher", handlers.GetAllThesisInfoByEvaTeacherId)
 		authGroup.DELETE("/thesis/delete/:id", handlers.DelThesisInfoById)
 		authGroup.POST("/thesis/updateteacher", handlers.UpdateThesisTeacherRef)
 		authGroup.POST("/thesis/add", handlers.AddThesisInfo)
 		authGroup.POST("/thesis/update", handlers.UpdateThesisInfo)
+		authGroup.POST("/thesis/updateauthor", handlers.UpdateThesisAuthor)
+		authGroup.GET("/thesis/needtocompletion", handlers.GetThesisInfoNeedToCompletion)
+		authGroup.POST("/thesis/completion",handlers.ThesisInfnCompletion)
+	}
+	
+	{
+		authGroup.POST("/addevaluate", handlers.AddEvaluate)
 	}
 	{
 		authGroup.POST("/getdocinfo", handlers.GetThesisFileInfoById)
+		authGroup.GET("/getthesisIdbyFileId", handlers.GetThesisIdByFileId)
 		authGroup.POST("/uploadthesisfile", handlers.UploadThesisInfoById)
 	}
 	{
@@ -49,11 +60,16 @@ func IntRouter() {
 		authGroup.POST("/commentreply/add", handlers.AddCommentReply)
 		authGroup.POST("/commentinfo", handlers.GetCommentByCommentId)
 		authGroup.GET("/getcommentsbythesisid", handlers.GetCommentsByThesisId)
+		authGroup.GET("/solvedcomments", handlers.GetCommentsSolved)
+		authGroup.POST("/solvecomment",handlers.CommentHaveSolved)
 	}
 	{
 		authGroup.GET("/getallstages", handlers.GetAllStages)
 		authGroup.POST("/addstages", handlers.AddStages)
 		authGroup.DELETE("/delstages/:id",handlers.DelStageById)
+	}
+	{
+		authGroup.POST("/diff",handlers.CompareDocx)
 	}
 	authGroup.GET("/menus", handlers.GetMenu)
 

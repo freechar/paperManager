@@ -1,9 +1,9 @@
 package service
 
 import (
+	"gorm.io/gorm"
 	"main/global"
 	"main/model"
-	"gorm.io/gorm"
 )
 
 func GetThesisesByUserId(userId uint) (model.User, error) {
@@ -162,7 +162,7 @@ func UpdateThesisTeacherRef(thesisId uint, checkerTeacher uint, evaluateTeachers
 	db.Model(&thesisInfo).Association("EvaluateTeachers").Clear()
 	// 处理关联关系  只需要添加一个checkers
 	var checkers []*model.User
-	
+
 	user := model.User{}
 	user.ID = checkerTeacher
 	checkers = append(checkers, &user)
@@ -195,16 +195,59 @@ func UpdateThesisTitleIntroduction(thesisId uint, title string, introduction str
 	result = db.Save(&thesisInfo)
 	return result.Error
 }
+
+func UpdateThesisAuthor(ThesisId uint, Author uint) error {
+	db := global.Gdb
+	// 获取到这个对象
+	thesisInfo := model.ThesisInfo{}
+	result := db.First(&thesisInfo, ThesisId)
+	if result.Error != nil {
+		return result.Error
+	}
+	// 更新
+	// 这里不判空 默认数据正确无误
+	thesisInfo.Author = Author
+	result = db.Save(&thesisInfo)
+	return result.Error
+}
+
+func ChangeThesisInfoStatusTo(thesisId uint, status uint) error {
+	db := global.Gdb
+	// 获取到这个对象
+	thesisInfo := model.ThesisInfo{}
+	result := db.First(&thesisInfo, thesisId)
+	if result.Error != nil {
+		return result.Error
+	}
+	// 更新
+	thesisInfo.Status = status
+	result = db.Save(&thesisInfo)
+	return result.Error
+}
+
 func GetThesisInfoByCheckerId(checkerId uint) ([]model.ThesisInfo, error) {
 	db := global.Gdb
-	u :=model.User{
-	}
+	u := model.User{}
 	result := db.Preload("NeedCheckThesises").Preload("NeedCheckThesises.AuthorUserInfo").Preload("NeedCheckThesises.ThesisFiles").First(&u, checkerId)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	var Thesises []model.ThesisInfo
 	for _, thesis := range u.NeedCheckThesises {
+		Thesises = append(Thesises, *thesis)
+	}
+	return Thesises, nil
+}
+
+func GetAllThesisInfoByEvaTeacherId(evaTheacherId uint) ([]model.ThesisInfo, error) {
+	db := global.Gdb
+	u := model.User{}
+	result := db.Preload("NeedEvaluateThesises").Preload("NeedEvaluateThesises.AuthorUserInfo").Preload("NeedEvaluateThesises.ThesisFiles").First(&u, evaTheacherId)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	var Thesises []model.ThesisInfo
+	for _, thesis := range u.NeedEvaluateThesises {
 		Thesises = append(Thesises, *thesis)
 	}
 	return Thesises, nil

@@ -24,7 +24,7 @@ const HomeLayout = () => {
   } = theme.useToken();
 
   const onCollapse = (collapsed, type) => {
-    console.log(collapsed)
+    // console.log(collapsed)
     collapsed.log(type)
     return
   }

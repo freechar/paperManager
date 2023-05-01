@@ -80,3 +80,19 @@ func (d DocxService) ChangeCommentsAutor(filePath string, commentsDiff string, a
 
 	return nil
 }
+
+
+// 比较文件
+func (d DocxService) CompareDiff(BeforeFilePath string, NowFilePath string ,SavePath string) error {
+	apiUrl := d.Url + "/compareDocumentDiff"
+	data := url.Values{}
+	data.Set("path_before", BeforeFilePath)
+	data.Set("path_now", NowFilePath)
+	data.Set("path_save", SavePath)
+	resp, err := http.PostForm(apiUrl, data)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	return nil
+}

@@ -85,7 +85,7 @@ const AddPaperInfoModal = (props) => {
                 response => {
                     let authors = []
                     if (response.data.status === 'success') {
-                        console.log(response.data)
+                        // console.log(response.data)
                         for (let index in response.data.user_info) {
                             let user = response.data.user_info[index];
                             authors.push({
@@ -142,7 +142,7 @@ const AddPaperInfoModal = (props) => {
                 name="add_paperInfo"
                 form={form}
                 onFinish={(values) => {
-                    console.log(values);
+                    // console.log(values);
                     handleSubmit(values);
                 }}
             >

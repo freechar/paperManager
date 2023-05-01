@@ -133,9 +133,27 @@ func GetCommentsByThesisId(thesisId uint) ([]model.Comment, error) {
 	// fmt.Println(thesisId)
 	comments := []model.Comment{}
 	// 通过thesisId找到所有的comment
-	result := db.Preload("Author").
-		Where("thesis_files.thesis_id = ? AND comments.stage = ?", thesisId, 0).
-		Joins("JOIN thesis_files ON thesis_files.id = comments.thesis_file_id").
+	result := db.Preload("Replies").Preload("Author").Where("solved_thesis_file_id IS NULL AND stage = ?", 0).
+		Joins("INNER JOIN thesis_files ON comments.thesis_file_id = thesis_files.id").
+		Joins("INNER JOIN thesis_infos ON thesis_files.thesis_id = thesis_infos.id").
+		Where("thesis_infos.id = ?", thesisId).Find(&comments)
+
+	return comments, result.Error
+}
+
+// 获取状态为1的在ThesisFileId在指定FileId之前的评论
+func GetSubmitedCommentBeforeThesisFileIdByThesisId(thesisFileId uint) ([]model.Comment, error) {
+	db := global.Gdb
+	comments := []model.Comment{}
+	
+	
+	// 获取状态为1的， SolvedThesisFileId存在并且小于给定的thesisFileId，与给定的thesisFileId在同一个论文下的评论
+	result := db.Preload("Replies").Preload("Author").
+		Where("stage = ? AND solved_thesis_file_id <= ?", 1, thesisFileId).
+		Joins("INNER JOIN thesis_files ON comments.thesis_file_id = thesis_files.id").
+		Joins("INNER JOIN thesis_infos ON thesis_files.thesis_id = thesis_infos.id").
+		Where("thesis_infos.id = (?)", db.Model(&model.ThesisFile{}).Where("id = ?", thesisFileId).
+			Select("thesis_id")).
 		Find(&comments)
 	return comments, result.Error
 }

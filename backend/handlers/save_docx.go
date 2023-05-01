@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"io/ioutil"
 	"main/service"
 	"main/utils"
@@ -59,7 +58,7 @@ func SaveDocx(c *gin.Context) {
 	}
 
 	// 打印bodyBytes
-	fmt.Println(string(bodyBytes))
+	// fmt.Println(string(bodyBytes))
 
 	//解析json
 	json, err := simplejson.NewJson(bodyBytes)
@@ -153,7 +152,9 @@ func SaveDocx(c *gin.Context) {
 	}
 
 	// 用新的文件替换旧的文件
-	err = os.Rename(localPrefix+filePath, "../"+thesisFileInfo.Path)
+	err = os.Rename(localPrefix+filePath, thesisFileInfo.Path)
+	// fmt.Println(localPrefix+filePath)
+	// fmt.Println("../"+thesisFileInfo.Path)
 	if err != nil {
 		c.JSON(200, gin.H{
 			"error": 0,
@@ -170,8 +171,6 @@ func SaveDocx(c *gin.Context) {
 			})
 		}
 	}
-
-
 
 	c.JSON(
 		200,

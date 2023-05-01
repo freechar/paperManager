@@ -72,11 +72,11 @@ const CommentForm = ({ UpdatedComment }) => {
         })
         setComment("");
         // 清空
-        console.log(form.setFieldValue("content", comment));
+        form.setFieldValue("content", comment);
         updateComment(id, token);
     };
     const handleFileChange = (info) => {
-        console.log(info)
+        // console.log(info)
         // // 如果文件状态是done（已完成）
         // if (info.file.status === 'done') {
         //   // 获取文件响应数据（假设是返回了文件地址）

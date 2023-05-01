@@ -1,21 +1,19 @@
 package handlers
 
 import (
-	"fmt"
+	// "fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"main/service"
 	"main/utils"
 	"net/http"
 	"strconv"
-
-	"github.com/google/uuid"
-
-	"github.com/gin-gonic/gin"
 )
 
 func GetThesisFileInfoById(ctx *gin.Context) {
 	// 先拿到id
 	thesisFileId := ctx.PostForm("thesis_file_id")
-	fmt.Println(ctx.GetPostForm("thesis_file_id"))
+	// fmt.Println(ctx.GetPostForm("thesis_file_id"))
 	if thesisFileId == "" {
 		ctx.JSON(http.StatusOK, json{
 			"status": "failed",
@@ -46,6 +44,42 @@ func GetThesisFileInfoById(ctx *gin.Context) {
 	})
 }
 
+
+func GetThesisIdByFileId(ctx *gin.Context) {
+	// 获取文件id get参数
+	fileId := ctx.Query("thesis_file_id")
+	if fileId == "" {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    "thesis_file_id empty",
+		})
+		return
+	}
+	id, err := strconv.Atoi(fileId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, json{
+			"status": "failed",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	thesisId, err := service.GetThesisFileInfo(uint(id))
+	
+	if err!=nil {
+		ctx.JSON(http.StatusOK,json{
+			"status":"failed",
+			"msg": err.Error(),
+		})
+		return 
+	}
+	ctx.JSON(
+		http.StatusOK,json{
+			"status":"success",
+			"msg":"",
+			"thesis_id":thesisId.ThesisId,
+		})	
+}
+
 func UploadThesisInfoById(ctx *gin.Context) {
 	// 获取ThesisId
 	thesisId := ctx.PostForm("thesis_id")
@@ -66,19 +100,15 @@ func UploadThesisInfoById(ctx *gin.Context) {
 	}
 	// 获取解决的评论
 	solvedComment := ctx.PostForm("solved_comment")
-	if solvedComment == "" {
-		ctx.JSON(http.StatusOK, json{
-			"status": "failed",
-			"msg":    "solved_comment empty",
-		})
-		return
-	}
-	// 将解决的评论转换为数组
-	solvedCommentArray := utils.StringToIntArray(solvedComment)
-	// int数组转换为uint数组
 	var solvedCommentUintArray []uint
-	for _, v := range solvedCommentArray {
-		solvedCommentUintArray = append(solvedCommentUintArray, uint(v))
+	solvedCommentUintArray = make([]uint, 0)
+	if solvedComment != "" {
+		// 将解决的评论转换为数组
+		solvedCommentArray := utils.StringToIntArray(solvedComment)
+		// int数组转换为uint数组
+		for _, v := range solvedCommentArray {
+			solvedCommentUintArray = append(solvedCommentUintArray, uint(v))
+		}
 	}
 
 	// 获取文件

@@ -12,8 +12,8 @@ const UserInfoUpdateModal = (props) => {
         props.setVisible(false);
     }
     const handleOk = () => {
-        console.log(props.userInfo)
-        // props.setVisible(false);
+        // console.log(props.userInfo)
+        props.setVisible(false);
     }
     const [form] = Form.useForm();
     useEffect(() => {
