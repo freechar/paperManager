@@ -13,6 +13,7 @@ func Init()  {
 	if err != nil {
 		panic(fmt.Errorf("Fatal err Init: %s \n", err))
 	}
+	InitMenu()
 	initDocxService()
 	InitGinEngine()
 	IntRouter()
