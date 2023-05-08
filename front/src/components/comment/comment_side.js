@@ -19,6 +19,7 @@ const CommentList = (props) => {
   const [commentList, setCommentList] = useState([])
   const { token } = UseAuth();
   const navigate = useNavigate();
+
   useEffect(() => {
     axios.get(config.apiUrl + "/auth/solvedcomments", {
       params: {

@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from changeCommentAutor import changeCommentAutor
+from checkFormat import getFormat
 from getComment import get_comments
 from compareDiff import diff_document
 app = Flask(__name__)
@@ -43,6 +44,15 @@ def compareDocumentDiffHandler():
         })
     return jsonify({
         "status": "success",
+    })
+
+@app.route('/getFormat', methods=['POST'])
+def getFormatHandler():
+    path = request.form.get('path')
+    response = getFormat(localPrefix+path)
+    
+    return jsonify({
+        "format": response
     })
 
 
