@@ -70,6 +70,7 @@ func IntRouter() {
 	}
 	{
 		authGroup.POST("/diff",handlers.CompareDocx)
+		authGroup.GET("/getformat", handlers.GetFormat)
 	}
 	authGroup.GET("/menus", handlers.GetMenu)
 

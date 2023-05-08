@@ -50,7 +50,7 @@ func (d DocxService) GetComments(path string) ([]resDocxComments, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	for _, comment := range commentsJSON {
 		if each_map, ok := comment.(map[string]interface{}); ok {
 			comments = append(comments, resDocxComments{
@@ -81,9 +81,8 @@ func (d DocxService) ChangeCommentsAutor(filePath string, commentsDiff string, a
 	return nil
 }
 
-
 // 比较文件
-func (d DocxService) CompareDiff(BeforeFilePath string, NowFilePath string ,SavePath string) error {
+func (d DocxService) CompareDiff(BeforeFilePath string, NowFilePath string, SavePath string) error {
 	apiUrl := d.Url + "/compareDocumentDiff"
 	data := url.Values{}
 	data.Set("path_before", BeforeFilePath)
@@ -95,4 +94,41 @@ func (d DocxService) CompareDiff(BeforeFilePath string, NowFilePath string ,Save
 	}
 	defer resp.Body.Close()
 	return nil
+}
+
+type ResDocxFormat struct {
+	Message   string
+	Paragraph string
+}
+
+func (d DocxService) GetFormat(Path string) ([]ResDocxFormat, error) {
+	apiUrl := d.Url + "/getFormat"
+	data := url.Values{}
+	data.Set("path", Path)
+	resp, err := http.PostForm(apiUrl, data)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	res, err := simplejson.NewJson(body)
+	if err != nil {
+		return nil, err
+	}
+	format := []ResDocxFormat{}
+	formatJSON, err := res.Get("format").Array()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, comment := range formatJSON {
+		if each_map, ok := comment.(map[string]interface{}); ok {
+			format = append(format, ResDocxFormat{
+				Message:   each_map["message"].(string),
+				Paragraph: each_map["paragraph"].(string),
+			})
+		}
+	}
+	return format, nil
 }

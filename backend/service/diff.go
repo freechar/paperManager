@@ -1,10 +1,11 @@
 package service
 
 import (
-	"gorm.io/gorm"
 	"main/global"
 	"main/model"
 	"strconv"
+
+	"gorm.io/gorm"
 )
 
 func CompareDocx(FileIdBef uint, FileIdNow uint) (string, error) {
@@ -56,4 +57,21 @@ func CompareDocx(FileIdBef uint, FileIdNow uint) (string, error) {
 	}
 	//存在，直接返回路径
 	return diff.DiffFilePath, nil
+}
+
+func Getformat(ThesisFileId uint) ([]ResDocxFormat, error) {
+	db := global.Gdb
+	// 查询 ThesisFileId
+	tFile := model.ThesisFile{}
+	result := db.Model(&model.ThesisFile{}).Where("id = ?", ThesisFileId).First(&tFile)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	// 调用python脚本
+	DocxService := NewDocxService()
+	res, err := DocxService.GetFormat(tFile.Path)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

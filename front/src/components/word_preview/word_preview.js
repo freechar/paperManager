@@ -8,6 +8,7 @@ import axios from 'axios';
 import { UseAuth } from "../auth";
 import config from '../../config/config.json'
 import DiffViewer from '../word_view/DiffViewer';
+import CheackFormat from './check_format';
 const { Sider, Content } = Layout;
 const { Option } = Select;
 const contentStyle = {
@@ -73,7 +74,7 @@ const DocPreview = () => {
                         })
                 }
             })
-    }, [token])
+    }, [token, id])
 
     const GetDiffPath = (thesisId, oldFileId, newFileId) => {
         // post 方法
@@ -134,8 +135,16 @@ const DocPreview = () => {
                             <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
                                 对比差异
                             </Button>
+                            <Button type="primary" style={{ marginLeft: "10px" }} onClick={()=>{
+                                setDiffVisible(false)
+                            }}>
+                                返回原文档
+                            </Button>
                         </Form.Item>
                     </Form>
+
+                    <CheackFormat thesisFileId={id} />
+
 
                 </Sider>
             </Layout>
