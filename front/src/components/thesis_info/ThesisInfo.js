@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Form, Select, Button, Typography, message, Modal } from "antd";
+import { Layout, Form, Select, Button, Typography, message, Modal, List } from "antd";
 import ProgressTracker from "../Steps";
 import { useNavigate, useParams } from "react-router-dom";
 import { UseAuth } from "../auth";
@@ -20,6 +20,10 @@ const App = () => {
   const [uploadCardVisible, setUploadCardVisible] = useState(false);
   const [userType, setUserType] = useState(null);
   const [updateThesisInfoModalVisible, setUpdateThesisInfoModalVisible] = useState(false);
+  const [evaList, setEvaList] = useState([{
+    "name": "",
+    "eva": ""
+  }]);
   const { id } = useParams();
   const { token } = UseAuth();
   const navigate = useNavigate();
@@ -93,6 +97,32 @@ const App = () => {
           setUserType(resUserInfo.UserType)
         } else {
           message.error(userInfoResponse.data.msg)
+        }
+      })
+    axios.get(config.apiUrl + '/auth/eva/all', {
+      params: {
+        thesis_id: id
+      },
+      headers: {
+        'Authorization': token
+      }
+    })
+      .then(evaListResponse => {
+        if (evaListResponse.data.status === "success") {
+          if (evaListResponse.data.evaluates === null) {
+            setEvaList([])
+            return
+          }
+          let _evaList = evaListResponse.data.evaluates.map(item => {
+            return {
+              "name": item.AuthorInfo.UserName,
+              "eva": item.EvaluateText
+            }
+          })
+          setEvaList(_evaList)
+          
+        } else {
+          message.error(evaListResponse.data.msg)
         }
       })
   }
@@ -178,6 +208,22 @@ const App = () => {
             </>
 
           }
+
+        </div>
+        <List
+          header={<div>评阅列表</div>}
+          bordered
+          dataSource={evaList}
+          style={{ marginTop: "30px" }}
+          renderItem={item => (
+            <List.Item>
+              <Typography.Text >[评阅人]</Typography.Text> {item.name} <br />
+              <Typography.Text >[评阅内容]</Typography.Text> {item.eva}
+            </List.Item>
+          )}
+
+        />
+        <div>
 
         </div>
         <ThesisInfoUpdateModal

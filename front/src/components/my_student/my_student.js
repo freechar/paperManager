@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, Button, Space } from 'antd';
+import { Table, Input, Button, Space, message } from 'antd';
 import axios from 'axios';
 import {
     SearchOutlined
@@ -138,6 +138,30 @@ const MyStuList = () => {
                         navigate('/home/paper/' + record.laestFile);
                     }}>
                         指导论文
+                    </Button>
+                    <Button type='primary' onClick={() => {
+                        let postData = new FormData();
+                        postData.append("thesis_id", record.thesisId);
+                        axios.post(config.apiUrl + '/auth/stage/next', postData, {
+                            headers: {
+                                "Authorization": token
+                            }
+                        })
+                            .then(res => {
+                                if (res.data.status === "success") {
+                                    message.success("进入下个阶段成功");
+                                }
+                                else {
+                                    message.error("进入下个阶段失败");
+                                }
+                            }
+                            )
+                            .catch(err => {
+                                console.log(err);
+                            }
+                            )
+                    }}>
+                        进入下个阶段
                     </Button>
                 </Space>
             ),

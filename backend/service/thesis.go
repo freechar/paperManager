@@ -1,9 +1,11 @@
 package service
 
 import (
-	"gorm.io/gorm"
+	"errors"
 	"main/global"
 	"main/model"
+
+	"gorm.io/gorm"
 )
 
 func GetThesisesByUserId(userId uint) (model.User, error) {
@@ -148,6 +150,31 @@ func DeleteThesisInfo(thesisId uint) error {
 		return nil
 	})
 	return err
+}
+
+func StageToNext(ThesisId uint) error {
+	// 拿到这个论文
+	db := global.Gdb
+	thesisInfo := model.ThesisInfo{}
+	result := db.First(&thesisInfo, ThesisId)
+	if result.Error != nil {
+		return result.Error
+	}
+	// 拿到这个论文的阶段
+	stage := model.Stage{}
+	result = db.First(&stage, thesisInfo.StagesId)
+	if result.Error != nil {
+		return result.Error
+	}
+	// 判断是否是最后一个阶段
+	stageNow := thesisInfo.StagesNow
+	if stageNow+1 == stage.Length {
+		return errors.New("last stage")
+	}
+	// 更新论文的阶段
+	thesisInfo.StagesNow = stageNow + 1
+	result = db.Save(&thesisInfo)
+	return result.Error
 }
 
 func UpdateThesisTeacherRef(thesisId uint, checkerTeacher uint, evaluateTeachers []uint) error {
