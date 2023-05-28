@@ -47,6 +47,7 @@ func IntRouter() {
 	
 	{
 		authGroup.POST("/addevaluate", handlers.AddEvaluate)
+		authGroup.GET("/eva/all", handlers.GetEvaluate)
 	}
 	{
 		authGroup.POST("/getdocinfo", handlers.GetThesisFileInfoById)
@@ -71,6 +72,8 @@ func IntRouter() {
 	{
 		authGroup.POST("/diff",handlers.CompareDocx)
 		authGroup.GET("/getformat", handlers.GetFormat)
+		authGroup.POST("/stage/next", handlers.StageToNext)
+
 	}
 	authGroup.GET("/menus", handlers.GetMenu)
 

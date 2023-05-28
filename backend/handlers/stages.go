@@ -77,3 +77,29 @@ func DelStageById(ctx *gin.Context) {
 		"msg":    "删除成功",
 	})
 }
+
+func StageToNext(ctx *gin.Context) {
+	// 拿到论文Id
+	thesisIdStr := ctx.PostForm("thesis_id")
+	// 转为uint
+	thesisIdUint, err := strconv.ParseUint(thesisIdStr, 10, 64)
+	if err != nil {
+		ctx.JSON(200, gin.H{
+			"status": "error",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	err=service.StageToNext(uint(thesisIdUint))
+	if err != nil {
+		ctx.JSON(200, gin.H{
+			"status": "error",
+			"msg":    err.Error(),
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"status": "success",
+		"msg":    "提交成功",
+	})
+}

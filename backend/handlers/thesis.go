@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	// "fmt"
 	"main/model"
 	"main/service"
 	"main/utils"
@@ -489,7 +489,7 @@ func GetThesisInfoByCheckerId(ctx *gin.Context) {
 			thesisInfoGroupByUserId[v.Author] = tmp
 		}
 	}
-	fmt.Println(thesisInfoGroupByUserId)
+	// fmt.Println(thesisInfoGroupByUserId)
 	var studentInfos []studentInfo
 	// 遍历map
 	for _, v := range thesisInfoGroupByUserId {

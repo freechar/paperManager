@@ -110,7 +110,31 @@ const DocPreview = () => {
         <div style={{ minHeight: '82vh' }}>
             {userType !== 0 ? <Layout style={{ minHeight: '82vh' }}>
                 <Content style={contentStyle}>
-                    {diffVisible ? <DiffViewer path={diffPath} title={diffPath} id={id} /> : <DocViewer id={id} />}
+                    {diffVisible ?
+                        <div style={{
+                            // 左右布局
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+
+                        }}>
+                            <div style={{
+                                width: '100%',
+                            }}>
+                                <DiffViewer path={diffPath} title={diffPath} id={id} />
+                            </div>
+
+                            <div style={{
+                                width: '100%',
+                            }}>
+                                <DocViewer id={id} />
+                            </div>
+
+                        </div>
+
+                        :
+                        <DocViewer id={id} />
+                    }
                 </Content>
                 <Sider style={siderStyle} width="20%">
                     <CommentSide thesisFileId={id} />
@@ -135,7 +159,7 @@ const DocPreview = () => {
                             <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
                                 对比差异
                             </Button>
-                            <Button type="primary" style={{ marginLeft: "10px" }} onClick={()=>{
+                            <Button type="primary" style={{ marginLeft: "10px" }} onClick={() => {
                                 setDiffVisible(false)
                             }}>
                                 返回原文档

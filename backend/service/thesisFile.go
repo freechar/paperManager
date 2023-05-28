@@ -18,6 +18,19 @@ func AddThesisFile(ThesisId uint, Path string, SolvedComments []uint) (model.The
 	var thesisFile model.ThesisFile
 	// 这里需要事务
 	err := db.Transaction(func(tx *gorm.DB) error {
+
+		// 拿到最后一个关联的ThesisFile
+		thesisFile = model.ThesisFile{}
+		if err := tx.Model(&model.ThesisFile{}).Where("thesis_id = ?", ThesisId).
+			Last(&thesisFile).Error; err != nil {
+			return err
+		}
+		// 删除与之相关联的Comment
+		if err := tx.Model(&thesisFile).Association("SolvedComments").
+			Delete(thesisFile.SolvedComments); err != nil {
+			return err
+		}
+
 		// 寻找最新的版本号
 		if err := tx.Model(&model.ThesisInfo{}).Find(&id, ThesisId).
 			Error; err != nil {
@@ -42,7 +55,7 @@ func AddThesisFile(ThesisId uint, Path string, SolvedComments []uint) (model.The
 		}
 		// 将solveComment的状态1
 		for _, v := range SolvedComments {
-			ChangeCommentStageToV2(tx,v,1)
+			ChangeCommentStageToV2(tx, v, 1)
 		}
 
 		// 创建
@@ -77,4 +90,3 @@ func GetThesisFileInfo(thesisFileId uint) (model.ThesisFile, error) {
 	result := db.Model(&model.ThesisFile{}).Preload("ThesisInfo").Find(&thesisFile, thesisFileId)
 	return thesisFile, result.Error
 }
-

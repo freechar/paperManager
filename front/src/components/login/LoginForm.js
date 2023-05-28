@@ -82,9 +82,9 @@ const LoginForm = () => {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>记住我</Checkbox>
             </Form.Item>
-            <a className="login-form-forgot" href="/forgetpasswd">
+            {/* <a className="login-form-forgot" href="/forgetpasswd">
               忘记密码
-            </a>
+            </a> */}
           </Form.Item>
 
           <Form.Item>

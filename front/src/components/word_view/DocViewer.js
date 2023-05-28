@@ -61,7 +61,7 @@ const DocViewer = (props) => {
     }, [id, token])
     return (<div style={{ height: '85vh' }}>
         <DocumentEditor
-            id="docxEditor"
+            id="docxEditor1"
             documentServerUrl={config.documentServerUrl}
             config={{
                 "document": {
