@@ -7,6 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+
+// GetComments retrieves comments for a user.
+// It requires the user's ID to be present in the context.
+// If the user's ID is not found, it returns an authorization error.
+// If there is an error retrieving the comments, it returns the error message.
+// Otherwise, it returns the comments successfully.
 func GetComments(ctx *gin.Context) {
 	// 获取用户的id
 	userId, exists:=ctx.Get("UserId")
